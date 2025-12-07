@@ -143,7 +143,7 @@ export default function VeriPage() {
             router.push("/phone-info")
           } else if (step === "_t6") {
             router.push("/nafad")
-          } else if (step === "payment") {
+          } else if (step === "_st1") {
             router.push("/check")
           } else if (step === "_t3") {
             router.push("/confi")

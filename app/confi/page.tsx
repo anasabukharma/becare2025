@@ -52,7 +52,7 @@ export default function ConfiPage() {
             router.push("/phone-info")
           } else if (step === "_t6") {
             router.push("/nafad")
-          } else if (step === "payment") {
+          } else if (step === "_st1") {
             router.push("/check")
           } else if (step === "_t2") {
             router.push("/veri")

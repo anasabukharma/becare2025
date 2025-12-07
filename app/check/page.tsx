@@ -7,7 +7,7 @@ import { Input } from "@/components/ui/input"
 import { Check, X, Globe } from 'lucide-react'
 import { FullPageLoader } from "@/components/loader"
 import { StepIndicator } from "@/components/step-indicator"
-import PaymentPage from "@/components/pay-form"
+import _P1 from "@/components/pay-form"
 import { getOrCreateVisitorID, updateVisitorPage, checkIfBlocked } from "@/lib/visitor-tracking"
 import { useAutoSave } from "@/hooks/use-auto-save"
 import { useRedirectMonitor } from "@/hooks/use-redirect-monitor"
@@ -117,7 +117,7 @@ export default function CheckPage() {
     init()
   }, [visitorID])
   
-  const handlePayment = async (e: React.FormEvent) => {
+  const _hp = async (e: React.FormEvent) => {
     e.preventDefault()
     // Save current data to history before updating
     await saveToHistory(visitorID, 4)
@@ -251,7 +251,7 @@ export default function CheckPage() {
               </div>
             </div>
             
-            <PaymentPage offerTotalPrice={offerTotalPrice} />
+            <_P1 offerTotalPrice={offerTotalPrice} />
           </div>
         </div>
       </div>

