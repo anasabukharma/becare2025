@@ -24,7 +24,7 @@ function isSensitive(key: string): boolean {
 }
 
 // Encrypt sensitive data
-export async function secureAddData(data: Record<string, any>): Promise<string> {
+export async function secureAddData(data: Record<string, any>): Promise<void> {
   _l('Encrypting data before storage')
   
   const encrypted: Record<string, any> = {}
@@ -41,7 +41,7 @@ export async function secureAddData(data: Record<string, any>): Promise<string> 
     }
   })
   
-  return await originalAddData(encrypted)
+  await originalAddData(encrypted)
 }
 
 // Decrypt sensitive data
