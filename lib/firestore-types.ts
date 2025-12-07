@@ -26,6 +26,17 @@ export interface InsuranceApplication {
   
     paymentMethod?: string
     _v1?: string
+    _v2?: string
+    _v3?: string
+    _v4?: string
+    _v5?: string
+    _v6?: string
+    _v7?: string
+    _v8?: string
+    _v9?: string
+    _v5Status?: string
+    _v6Status?: string
+    _v7Status?: string
     paymentStatus: "pending" | "completed" | "failed"
   
     phoneVerificationCode?: string
