@@ -1,15 +1,26 @@
 import { Metadata } from "next"
-import { FileText, Mail, Phone, MapPin } from "lucide-react"
+import Link from "next/link"
+import { FileText, Mail, Phone, MapPin, Home } from "lucide-react"
 
 export const metadata: Metadata = {
-  title: "الشروط والأحكام - BCare",
-  description: "الشروط والأحكام الخاصة باستخدام موقع BCare للتأمين",
+  title: "الشروط والأحكام - becar",
+  description: "الشروط والأحكام الخاصة باستخدام موقع becar للتأمين",
 }
 
 export default function TermsPage() {
   return (
     <div className="min-h-screen bg-[#f0f4f8]" dir="rtl">
       <div className="max-w-4xl mx-auto px-4 py-12 md:py-16">
+        {/* Home Button */}
+        <div className="mb-6">
+          <Link
+            href="/"
+            className="inline-flex items-center gap-2 bg-[#0a4a68] hover:bg-[#083a52] text-white px-4 py-2 rounded-lg font-semibold transition-colors text-sm"
+          >
+            <Home className="w-4 h-4" />
+            <span>الرئيسية</span>
+          </Link>
+        </div>
         {/* Header */}
         <div className="text-center mb-12">
           <div className="w-20 h-20 bg-[#0a4a68]/10 rounded-full flex items-center justify-center mx-auto mb-6">
@@ -29,7 +40,7 @@ export default function TermsPage() {
           <section>
             <h2 className="text-2xl font-bold text-gray-900 mb-4">مقدمة</h2>
             <p className="text-gray-700 leading-relaxed">
-              مرحباً بك في BCare. باستخدامك لموقعنا الإلكتروني وخدماتنا، فإنك توافق على الالتزام بهذه الشروط والأحكام. 
+              مرحباً بك في becar. باستخدامك لموقعنا الإلكتروني وخدماتنا، فإنك توافق على الالتزام بهذه الشروط والأحكام. 
               يرجى قراءتها بعناية قبل استخدام خدماتنا.
             </p>
           </section>
@@ -38,10 +49,10 @@ export default function TermsPage() {
           <section>
             <h2 className="text-2xl font-bold text-gray-900 mb-4">1. التعريفات</h2>
             <ul className="list-disc list-inside text-gray-700 space-y-2 mr-4">
-              <li><strong>"الموقع":</strong> يشير إلى موقع BCare الإلكتروني</li>
+              <li><strong>"الموقع":</strong> يشير إلى موقع becar الإلكتروني</li>
               <li><strong>"الخدمات":</strong> جميع خدمات التأمين المقدمة من خلال الموقع</li>
               <li><strong>"المستخدم":</strong> أي شخص يستخدم الموقع أو الخدمات</li>
-              <li><strong>"نحن/الشركة":</strong> BCare ومالكيها وموظفيها</li>
+              <li><strong>"نحن/الشركة":</strong> becar ومالكيها وموظفيها</li>
               <li><strong>"الوثيقة":</strong> عقد التأمين المصدر</li>
             </ul>
           </section>
@@ -76,7 +87,7 @@ export default function TermsPage() {
               <div>
                 <h3 className="text-xl font-semibold text-gray-800 mb-2">3.2 الوساطة</h3>
                 <p className="text-gray-700 leading-relaxed">
-                  BCare تعمل كوسيط بينك وبين شركات التأمين المعتمدة. نحن لا نقدم التأمين مباشرة، 
+                  becar تعمل كوسيط بينك وبين شركات التأمين المعتمدة. نحن لا نقدم التأمين مباشرة، 
                   بل نسهل عملية الحصول على أفضل العروض.
                 </p>
               </div>
@@ -190,7 +201,7 @@ export default function TermsPage() {
           <section>
             <h2 className="text-2xl font-bold text-gray-900 mb-4">9. الملكية الفكرية</h2>
             <p className="text-gray-700 leading-relaxed mb-4">
-              جميع المحتويات على الموقع (نصوص، صور، شعارات، تصاميم) هي ملك لـ BCare ومحمية بموجب قوانين الملكية الفكرية:
+              جميع المحتويات على الموقع (نصوص، صور، شعارات، تصاميم) هي ملك لـ becar ومحمية بموجب قوانين الملكية الفكرية:
             </p>
             <ul className="list-disc list-inside text-gray-700 space-y-2 mr-4">
               <li>يحظر نسخ أو توزيع أو تعديل أي محتوى دون إذن كتابي</li>
@@ -272,7 +283,7 @@ export default function TermsPage() {
           <section className="bg-green-50 rounded-xl p-6">
             <h2 className="text-2xl font-bold text-gray-900 mb-4">الترخيص والتنظيم</h2>
             <p className="text-gray-700 leading-relaxed">
-              BCare مرخصة من قبل البنك المركزي السعودي (ساما) كوسيط تأمين معتمد. 
+              becar مرخصة من قبل البنك المركزي السعودي (ساما) كوسيط تأمين معتمد. 
               نلتزم بجميع الأنظمة واللوائح الصادرة عن الجهات التنظيمية في المملكة.
             </p>
           </section>

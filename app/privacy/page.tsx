@@ -1,15 +1,26 @@
 import { Metadata } from "next"
-import { Shield, Mail, Phone, MapPin } from "lucide-react"
+import Link from "next/link"
+import { Shield, Mail, Phone, MapPin, Home } from "lucide-react"
 
 export const metadata: Metadata = {
-  title: "سياسة الخصوصية - BCare",
-  description: "سياسة الخصوصية وحماية البيانات الشخصية لموقع BCare للتأمين",
+  title: "سياسة الخصوصية - becar",
+  description: "سياسة الخصوصية وحماية البيانات الشخصية لموقع becar للتأمين",
 }
 
 export default function PrivacyPolicyPage() {
   return (
     <div className="min-h-screen bg-[#f0f4f8]" dir="rtl">
       <div className="max-w-4xl mx-auto px-4 py-12 md:py-16">
+        {/* Home Button */}
+        <div className="mb-6">
+          <Link
+            href="/"
+            className="inline-flex items-center gap-2 bg-[#0a4a68] hover:bg-[#083a52] text-white px-4 py-2 rounded-lg font-semibold transition-colors text-sm"
+          >
+            <Home className="w-4 h-4" />
+            <span>الرئيسية</span>
+          </Link>
+        </div>
         {/* Header */}
         <div className="text-center mb-12">
           <div className="w-20 h-20 bg-[#0a4a68]/10 rounded-full flex items-center justify-center mx-auto mb-6">
@@ -29,7 +40,7 @@ export default function PrivacyPolicyPage() {
           <section>
             <h2 className="text-2xl font-bold text-gray-900 mb-4">مقدمة</h2>
             <p className="text-gray-700 leading-relaxed">
-              نحن في BCare نلتزم بحماية خصوصيتك وأمان بياناتك الشخصية. توضح هذه السياسة كيفية جمع واستخدام وحماية المعلومات التي تقدمها لنا عند استخدام موقعنا الإلكتروني وخدماتنا.
+              نحن في becar نلتزم بحماية خصوصيتك وأمان بياناتك الشخصية. توضح هذه السياسة كيفية جمع واستخدام وحماية المعلومات التي تقدمها لنا عند استخدام موقعنا الإلكتروني وخدماتنا.
             </p>
           </section>
 

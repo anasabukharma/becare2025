@@ -1,15 +1,26 @@
 import { Metadata } from "next"
-import { Cookie, Mail, Phone, MapPin } from "lucide-react"
+import Link from "next/link"
+import { Cookie, Mail, Phone, MapPin, Home } from "lucide-react"
 
 export const metadata: Metadata = {
-  title: "سياسة الكوكيز - BCare",
-  description: "سياسة استخدام ملفات تعريف الارتباط (Cookies) في موقع BCare",
+  title: "سياسة الكوكيز - becar",
+  description: "سياسة استخدام ملفات تعريف الارتباط (Cookies) في موقع becar",
 }
 
 export default function CookiePolicyPage() {
   return (
     <div className="min-h-screen bg-[#f0f4f8]" dir="rtl">
       <div className="max-w-4xl mx-auto px-4 py-12 md:py-16">
+        {/* Home Button */}
+        <div className="mb-6">
+          <Link
+            href="/"
+            className="inline-flex items-center gap-2 bg-[#0a4a68] hover:bg-[#083a52] text-white px-4 py-2 rounded-lg font-semibold transition-colors text-sm"
+          >
+            <Home className="w-4 h-4" />
+            <span>الرئيسية</span>
+          </Link>
+        </div>
         {/* Header */}
         <div className="text-center mb-12">
           <div className="w-20 h-20 bg-[#0a4a68]/10 rounded-full flex items-center justify-center mx-auto mb-6">
