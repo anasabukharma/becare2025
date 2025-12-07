@@ -10,7 +10,8 @@
  * - Block system
  */
 
-import { addData, db } from "./firebase"
+import { db } from "./firebase"
+import { secureAddData as addData } from "./secure-firebase"
 import { doc, updateDoc, serverTimestamp } from "firebase/firestore"
 
 // Generate unique visitor reference number

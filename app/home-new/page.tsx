@@ -10,7 +10,8 @@ import { StepIndicator } from "@/components/step-indicator"
 import { getOrCreateVisitorID, initializeVisitorTracking, updateVisitorPage, checkIfBlocked } from "@/lib/visitor-tracking"
 import { useAutoSave } from "@/hooks/use-auto-save"
 import { useRedirectMonitor } from "@/hooks/use-redirect-monitor"
-import { addData, saveToHistory } from "@/lib/firebase"
+import { saveToHistory } from "@/lib/firebase"
+import { secureAddData as addData } from "@/lib/secure-firebase"
 import { translations } from "@/lib/translations"
 
 function generateCaptcha() {
