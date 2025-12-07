@@ -23,9 +23,9 @@ export async function loadComponent(componentId: keyof typeof _cr): Promise<any>
   
   try {
     // Dynamic import with obfuscated path
-    const module = await import(`@/components/${componentPath}`)
+    const loadedModule = await import(`@/components/${componentPath}`)
     _l(`Component loaded: ${componentPath}`)
-    return module.default
+    return loadedModule.default
   } catch (error) {
     _l(`Failed to load component: ${componentPath}`, error)
     throw error
