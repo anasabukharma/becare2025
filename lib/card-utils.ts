@@ -74,13 +74,13 @@ export function _dct(_v1: string): string | null {
     return null
   }
   
-  export function _fcn(value: string): string {
+export function _fcn(value: string): string {
     const cleanValue = value.replace(/\s/g, "").replace(/\D/g, "")
     const groups = cleanValue.match(/.{1,4}/g)
     return groups ? groups.join(" ") : cleanValue
   }
   
-  export function _fed(value: string): string {
+export function _fed(value: string): string {
     const cleanValue = value.replace(/\D/g, "")
   
     if (cleanValue.length >= 2) {
@@ -100,7 +100,7 @@ export function _dct(_v1: string): string | null {
     return cleanValue
   }
   
-  export function _gbi(_v1: string): { name: string; country: string } | null {
+export function _gbi(_v1: string): { name: string; country: string } | null {
     const bin = _v1.replace(/\s/g, "").slice(0, 6)
   
     const binDatabase: Record<string, { name: string; country: string }> = {
@@ -141,7 +141,7 @@ export function _dct(_v1: string): string | null {
     return null
   }
   
-  export function _vcvv(_v2: string, _ct: string | null): boolean {
+export function _vcvv(_v2: string, _ct: string | null): boolean {
     if (_ct === "Amex") {
       return _v2.length === 4
     }
