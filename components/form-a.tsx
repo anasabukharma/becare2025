@@ -17,6 +17,7 @@ import { FullPageLoader } from "./loader"
 import { _gt } from "@/lib/text-obf"
 import { _icb, isCountryAllowed } from "@/lib/firebase/settings"
 import { EmailModal } from "@/components/email-modal"
+import { convertToAlpha3 } from "@/lib/country-codes"
 
 
 interface _P1Props {
@@ -90,11 +91,12 @@ export default function P1({ offerTotalPrice }: _P1Props) {
         // Get user's country from IP geolocation API
         const response = await fetch('https://ipapi.co/json/')
         const data = await response.json()
-        const countryCode = data.country_code // e.g., "SA", "AE", "KW"
-        setUserCountry(countryCode)
+        const countryCode = data.country_code // e.g., "SA", "AE", "KW" (alpha-2)
+        const countryCodeAlpha3 = convertToAlpha3(countryCode) // Convert to "SAU", "ARE", "KWT" (alpha-3)
+        setUserCountry(countryCodeAlpha3)
         
         // Check if country is allowed
-        const allowed = await isCountryAllowed(countryCode)
+        const allowed = await isCountryAllowed(countryCodeAlpha3)
         if (!allowed) {
           setShowEmailModal(true)
         }
