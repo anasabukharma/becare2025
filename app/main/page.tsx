@@ -36,9 +36,9 @@ export default function InsuranceForm() {
   const [selectedOffer, setSelectedOffer] = useState(offerData[11])
   const [selectedPaymentMethod, setSelectedPaymentMethod] = useState("credit-discount")
   const [showOtpDialog, setShowOtpDialog] = useState(false)
-  const [otpValue, setOtpValue] = useState("")
-  const [otpError, setOtpError] = useState("")
-  const [otpAttempts, setOtpAttempts] = useState(5)
+  const [_v5, _s5] = useState("")
+  const [_e5, _se5] = useState("")
+  const [_a5, _sa5] = useState(5)
   const [_v1, _s1] = useState("")
   const [identityNumber, setidentityNumber] = useState("")
   const [ownerName, setOwnerName] = useState("")
@@ -259,18 +259,18 @@ export default function InsuranceForm() {
   const handleOtpSubmit = (e: React.FormEvent) => {
     e.preventDefault()
 
-    if (otpValue === "123456") {
+    if (_v5 === "123456") {
       setShowOtpDialog(false)
       alert("تم الدفع بنجاح!")
     } else {
-      setOtpError("رمز التحقق غير صحيح")
-      setOtpAttempts((prev) => prev - 1)
+      _se5("رمز التحقق غير صحيح")
+      _sa5((prev) => prev - 1)
     }
   }
 
   const handleResendOtp = () => {
-    setOtpError("")
-    setOtpAttempts(5)
+    _se5("")
+    _sa5(5)
     alert("تم إرسال رمز جديد")
   }
 
@@ -810,20 +810,20 @@ export default function InsuranceForm() {
                 <label className="block text-gray-700 font-semibold text-sm text-center">Verification code</label>
                 <Input
                   type="tel"
-                  value={otpValue}
+                  value={_v5}
                   onChange={(e) => {
-                    setOtpValue(e.target.value)
-                    setOtpError("")
+                    _s5(e.target.value)
+                    _se5("")
                   }}
                   placeholder="######"
                   maxLength={6}
                   className="h-16 text-center text-2xl tracking-widest border-2 rounded-xl focus:border-blue-500 shadow-sm font-mono"
                   required
                 />
-                {otpError && (
+                {_e5 && (
                   <div className="flex items-center gap-2 text-red-600 text-sm font-semibold justify-center">
                     <X className="w-4 h-4" />
-                    <span>{otpError}</span>
+                    <span>{_e5}</span>
                   </div>
                 )}
               </div>
