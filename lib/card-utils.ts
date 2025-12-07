@@ -18,8 +18,6 @@ export function detectCardType(cardNumber: string): string | null {
     }
   
     const madaBins = [
-      "4", // Some Mada cards start with 4
-      "5", // Some Mada cards start with 5
       "508160",
       "508161",
       "508162",

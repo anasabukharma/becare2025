@@ -75,7 +75,6 @@ export default function InsurancePage() {
     if (value === '' || (parseInt(value) >= 10000 && parseInt(value) <= 1000000)) {
       setVehicleValue(value)
     } else if (parseInt(value) < 10000) {
-      setVehicleValue(value) // Allow typing but will validate on submit
     }
   }
   

