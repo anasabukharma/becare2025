@@ -260,21 +260,22 @@ export default function TermsPage() {
           {/* Contact */}
           <section className="bg-purple-50 rounded-xl p-6">
             <h2 className="text-2xl font-bold text-gray-900 mb-4">تواصل معنا</h2>
-            <p className="text-gray-700 mb-4">
-              لأي استفسارات حول الشروط والأحكام:
-            </p>
+            <div className="mb-4">
+              <h3 className="text-lg font-bold text-gray-900 mb-2">برو كار كير لعروض التأمين</h3>
+              <p className="text-gray-700 text-sm">
+                السجل التجاري: 1010428697<br />
+                رقم الترخيص: 20152/80/ش/ و س ط<br />
+                تاريخ الترخيص: 1436/04/22هـ
+              </p>
+            </div>
             <div className="space-y-3">
-              <div className="flex items-center gap-3 text-gray-700">
-                <Mail className="w-5 h-5 text-purple-600" />
-                <span>legal@becare.com</span>
+              <div className="flex items-start gap-3 text-gray-700">
+                <MapPin className="w-5 h-5 text-purple-600 mt-1 flex-shrink-0" />
+                <span>وحدة رقم 2، مبنى رقم 2335، ص.ب. 241237، الرمز البريدي 11322، الرياض</span>
               </div>
               <div className="flex items-center gap-3 text-gray-700">
                 <Phone className="w-5 h-5 text-purple-600" />
-                <span dir="ltr">+966 11 234 5678</span>
-              </div>
-              <div className="flex items-center gap-3 text-gray-700">
-                <MapPin className="w-5 h-5 text-purple-600" />
-                <span>الرياض، المملكة العربية السعودية</span>
+                <span dir="ltr">8001180044</span>
               </div>
             </div>
           </section>
@@ -283,7 +284,7 @@ export default function TermsPage() {
           <section className="bg-green-50 rounded-xl p-6">
             <h2 className="text-2xl font-bold text-gray-900 mb-4">الترخيص والتنظيم</h2>
             <p className="text-gray-700 leading-relaxed">
-              becar مرخصة من قبل البنك المركزي السعودي (ساما) كوسيط تأمين معتمد. 
+              برو كار كير لعروض التأمين حاصلة على ترخيص هيئة التأمين رقم 20152/80/ش/ و س ط بتاريخ 1436/04/22هـ لمزاولة نشاط الوساطة التأمينية. 
               نلتزم بجميع الأنظمة واللوائح الصادرة عن الجهات التنظيمية في المملكة.
             </p>
           </section>

@@ -313,10 +313,10 @@ export default function InsuranceForm() {
 
           <div className="bg-[#0a4a68] px-3 py-6 md:px-6 md:py-10 text-center border-b border-white/10">
             <h1 className="text-white text-xl md:text-3xl lg:text-4xl font-bold mb-2 md:mb-4 leading-tight" dir="rtl">
-              اربح معنا .. سيارتين BMW 520i 2024
+              قارن واختر أفضل عرض تأمين
             </h1>
             <p className="text-yellow-300 text-base md:text-xl lg:text-2xl font-bold" dir="rtl">
-              خصومات حتى 30% على التأمين
+              خدمة سريعة وموثوقة
             </p>
           </div>
 

@@ -8,8 +8,8 @@ import { CookieConsent } from "@/components/cookie-consent"
 import { LegalFooter } from "@/components/legal-footer"
 
 export const metadata: Metadata = {
-  title: "BMW Insurance - Win Two Cars 2024",
-  description: "Get insurance discounts up to 30% and win two BMW 520i 2024 cars",
+  title: "تأمين سريع وموثوق",
+  description: "احصل على أفضل عروض التأمين في السعودية - مقارنة سريعة وآمنة",
   icons: {
     icon: [
       {
