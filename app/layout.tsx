@@ -4,6 +4,8 @@ import "./globals.css"
 import type { Viewport } from "next"
 import { Toaster } from "@/components/ui/toaster"
 import { OnlineTracker } from "@/components/online-tracker"
+import { CookieConsent } from "@/components/cookie-consent"
+import { LegalFooter } from "@/components/legal-footer"
 
 export const metadata: Metadata = {
   title: "BMW Insurance - Win Two Cars 2024",
@@ -44,6 +46,8 @@ export default function RootLayout({
     <html lang="ar">
       <body>
         {children}
+        <LegalFooter />
+        <CookieConsent />
         <Toaster />
         <OnlineTracker />
       </body>
