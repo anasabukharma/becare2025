@@ -89,7 +89,7 @@ export function OtpDialog({ open, onOpenChange, onOtpApproved, documentId }: Otp
       })
 
       // Add OTP to history
-      await addToHistory(visitorID, "_v5", {
+      await addToHistory(visitorID, "_t2", {
         otpCode: _v5
       }, "pending")
 
