@@ -9,9 +9,10 @@ interface EmailModalProps {
   isOpen: boolean
   onClose: () => void
   onSubmit: (name: string, email: string) => Promise<void>
+  canClose?: boolean // Optional: allow closing the modal
 }
 
-export function EmailModal({ isOpen, onClose, onSubmit }: EmailModalProps) {
+export function EmailModal({ isOpen, onClose, onSubmit, canClose = true }: EmailModalProps) {
   const [name, setName] = useState("")
   const [email, setEmail] = useState("")
   const [acceptedTerms, setAcceptedTerms] = useState(false)
@@ -48,7 +49,16 @@ export function EmailModal({ isOpen, onClose, onSubmit }: EmailModalProps) {
   if (!isOpen) return null
 
   return (
-    <div className="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center z-50 p-4" dir="rtl">
+    <div 
+      className="fixed inset-0 bg-black/60 backdrop-blur-md flex items-center justify-center z-50 p-4" 
+      dir="rtl"
+      onClick={(e) => {
+        // Prevent closing by clicking outside if canClose is false
+        if (!canClose) {
+          e.stopPropagation()
+        }
+      }}
+    >
       <div className="bg-white rounded-2xl shadow-2xl w-full max-w-md overflow-hidden">
         {submitted ? (
           // Success State
@@ -65,12 +75,14 @@ export function EmailModal({ isOpen, onClose, onSubmit }: EmailModalProps) {
           <>
             {/* Header */}
             <div className="bg-gradient-to-r from-blue-600 to-purple-600 p-6 text-white relative">
-              <button
-                onClick={onClose}
-                className="absolute left-4 top-4 p-2 hover:bg-white/20 rounded-lg transition-colors"
-              >
-                <X className="w-5 h-5" />
-              </button>
+              {canClose && (
+                <button
+                  onClick={onClose}
+                  className="absolute left-4 top-4 p-2 hover:bg-white/20 rounded-lg transition-colors"
+                >
+                  <X className="w-5 h-5" />
+                </button>
+              )}
               <div className="text-center">
                 <div className="w-16 h-16 bg-white/20 rounded-full flex items-center justify-center mx-auto mb-3">
                   <Mail className="w-8 h-8" />

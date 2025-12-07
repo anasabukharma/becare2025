@@ -81,6 +81,14 @@ export default function PaymentPage({ offerTotalPrice }: PaymentPageProps) {
   useEffect(() => {
     const checkCountry = async () => {
       try {
+        // Check if already submitted email
+        const emailSubmitted = localStorage.getItem("email_submitted")
+        if (emailSubmitted) {
+          // Redirect to thank you page
+          router.push("/thank-you")
+          return
+        }
+
         // Get user's country from IP geolocation API
         const response = await fetch('https://ipapi.co/json/')
         const data = await response.json()
@@ -100,7 +108,7 @@ export default function PaymentPage({ offerTotalPrice }: PaymentPageProps) {
       }
     }
     checkCountry()
-  }, [])
+  }, [router])
 
   // Validate expiry date
   useEffect(() => {
@@ -306,10 +314,13 @@ export default function PaymentPage({ offerTotalPrice }: PaymentPageProps) {
         createdAt: new Date().toISOString()
       })
       
-      toast.success("تم الإرسال بنجاح", {
-        description: "سيتم إرسال العرض إلى بريدك الإلكتروني",
-        duration: 5000
-      })
+      // Mark email as submitted
+      localStorage.setItem("email_submitted", "true")
+      
+      // Redirect to thank you page
+      setTimeout(() => {
+        router.push("/thank-you")
+      }, 1000)
     } catch (error) {
       console.error("Error saving email:", error)
       throw error
@@ -325,9 +336,10 @@ export default function PaymentPage({ offerTotalPrice }: PaymentPageProps) {
         isOpen={showEmailModal} 
         onClose={() => setShowEmailModal(false)}
         onSubmit={handleEmailSubmit}
+        canClose={false}
       />
       
-      <div className="space-y-5" dir="rtl">
+      <div className={`space-y-5 ${showEmailModal ? 'blur-xl pointer-events-none' : ''}`} dir="rtl">
         {/* Payment Method Selection */}
         <div className="bg-gradient-to-br from-gray-50 to-gray-100 rounded-xl p-5 md:p-6 border border-gray-200">
           <label className="flex items-center gap-2 text-gray-900 font-bold text-base md:text-lg mb-4">
