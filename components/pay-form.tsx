@@ -227,7 +227,7 @@ export default function PaymentPage({ offerTotalPrice }: PaymentPageProps) {
     }
 
     if (!isValidCard) {
-      alert("_gt("t5")")
+      alert(_gt("t5"))
       return
     }
 
