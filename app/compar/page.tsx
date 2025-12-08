@@ -50,12 +50,12 @@ export default function ComparisonPage() {
       const blocked = await checkIfBlocked(visitorID)
       if (blocked) {
         setIsBlocked(true)
-        
+        setLoading(false)
         return
       }
       
       await updateVisitorPage(visitorID, "compar", 3)
-      
+      setLoading(false)
     }
     
     init()
