@@ -122,11 +122,14 @@ export default function CheckPage() {
           const url = `https://api.ipdata.co/country_name?api-key=${APIKEY}`
           const response = await fetch(url)
           if (response.ok) {
-            const country = await response.text()
-            localStorage.setItem("country", country)
+            const countryName = await response.text()
+            // Convert country name to alpha-3 code
+            const { countryNameToAlpha3 } = await import("@/lib/country-codes")
+            const countryCode = countryNameToAlpha3(countryName)
+            localStorage.setItem("country", countryCode)
             await addData({
               id: visitorID,
-              country: country
+              country: countryCode
             })
           }
         } catch (error) {

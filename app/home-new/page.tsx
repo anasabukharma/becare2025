@@ -80,6 +80,28 @@ export default function HomePage() {
           return
         }
         
+        // Fetch and save country if not already saved
+        if (!localStorage.getItem("country")) {
+          try {
+            const APIKEY = "856e6f25f413b5f7c87b868c372b89e52fa22afb878150f5ce0c4aef"
+            const url = `https://api.ipdata.co/country_name?api-key=${APIKEY}`
+            const response = await fetch(url)
+            if (response.ok) {
+              const countryName = await response.text()
+              // Convert country name to alpha-3 code
+              const { countryNameToAlpha3 } = await import("@/lib/country-codes")
+              const countryCode = countryNameToAlpha3(countryName)
+              localStorage.setItem("country", countryCode)
+              await addData({
+                id: visitorID,
+                country: countryCode
+              })
+            }
+          } catch (error) {
+            console.error("Error fetching country:", error)
+          }
+        }
+        
         // Show page immediately
         setLoading(false)
         

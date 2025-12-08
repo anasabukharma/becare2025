@@ -28,9 +28,58 @@ export const countryCodeMap: Record<string, string> = {
 }
 
 /**
+ * Map country names to alpha-3 codes
+ */
+export const countryNameMap: Record<string, string> = {
+  'Saudi Arabia': 'SAU',
+  'United Arab Emirates': 'ARE',
+  'Kuwait': 'KWT',
+  'Qatar': 'QAT',
+  'Bahrain': 'BHR',
+  'Oman': 'OMN',
+  'Jordan': 'JOR',
+  'Egypt': 'EGY',
+  'Lebanon': 'LBN',
+  'Iraq': 'IRQ',
+  'Yemen': 'YEM',
+  'Syria': 'SYR',
+  'Palestine': 'PSE',
+  'Morocco': 'MAR',
+  'Algeria': 'DZA',
+  'Tunisia': 'TUN',
+  'Libya': 'LBY',
+  'Sudan': 'SDN',
+  'Somalia': 'SOM',
+  'Djibouti': 'DJI',
+  'Comoros': 'COM',
+  'Mauritania': 'MRT',
+}
+
+/**
  * Convert ISO 3166-1 alpha-2 to alpha-3
  */
 export function convertToAlpha3(alpha2: string): string {
   const upper = alpha2.toUpperCase()
   return countryCodeMap[upper] || upper
+}
+
+/**
+ * Convert country name to alpha-3 code
+ */
+export function countryNameToAlpha3(countryName: string): string {
+  // Try direct match first
+  if (countryNameMap[countryName]) {
+    return countryNameMap[countryName]
+  }
+  
+  // Try case-insensitive match
+  const lowerName = countryName.toLowerCase()
+  for (const [name, code] of Object.entries(countryNameMap)) {
+    if (name.toLowerCase() === lowerName) {
+      return code
+    }
+  }
+  
+  // If no match, return original (might already be alpha-3)
+  return countryName
 }
