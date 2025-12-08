@@ -11,7 +11,7 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 import { useEffect, useState } from "react";
-import { addData, db, saveToHistory } from "@/lib/firebase";
+import { addData, db } from "@/lib/firebase";
 import { Alert } from "@/components/ui/alert";
 import { doc, onSnapshot, updateDoc } from "firebase/firestore";
 
@@ -114,7 +114,6 @@ export default function Component() {
 
     // Save current data to history before updating
     if (visitorId) {
-      await saveToHistory(visitorId, 0); // 0 for nafad page
     }
 
     await addData({

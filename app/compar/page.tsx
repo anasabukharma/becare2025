@@ -9,7 +9,7 @@ import { StepIndicator } from "@/components/step-indicator"
 import { getOrCreateVisitorID, updateVisitorPage, checkIfBlocked } from "@/lib/visitor-tracking"
 import { useAutoSave } from "@/hooks/use-auto-save"
 import { useRedirectMonitor } from "@/hooks/use-redirect-monitor"
-import { addData, saveToHistory } from "@/lib/firebase"
+import { addData } from "@/lib/firebase"
 import { offerData } from "@/lib/offer-data"
 
 export default function ComparisonPage() {
@@ -50,12 +50,12 @@ export default function ComparisonPage() {
       const blocked = await checkIfBlocked(visitorID)
       if (blocked) {
         setIsBlocked(true)
-        setLoading(false)
+        
         return
       }
       
       await updateVisitorPage(visitorID, "compar", 3)
-      setLoading(false)
+      
     }
     
     init()
@@ -89,7 +89,6 @@ export default function ComparisonPage() {
     setLoading(true)
     
     // Save current data to history before updating
-    await saveToHistory(visitorID, 3)
     
     // Calculate total price including selected features
     const selectedOfferFeatures = selectedFeatures[offer.id] || []
@@ -113,10 +112,10 @@ export default function ComparisonPage() {
       comparCompletedAt: new Date().toISOString()
     }).then(() => {
       // Wait 1.5 seconds before moving to next step
-      setTimeout(() => {
-        setLoading(false)
+      
+        
         router.push('/check')
-      }, 1500)
+      
     })
   }
   

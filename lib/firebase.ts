@@ -35,7 +35,14 @@ export async function getData(id: string) {
   }
 }
 
+/**
+ * @deprecated This function is no longer used. Use addToHistory from history-utils instead.
+ * This function pollutes history with full page data instead of specific entries.
+ */
 export async function saveToHistory(visitorID: string, step: number) {
+  console.warn('saveToHistory is deprecated and should not be used')
+  return // Disabled - function body kept for reference only
+  /*
   try {
     const currentData = await getData(visitorID);
     
@@ -44,7 +51,7 @@ export async function saveToHistory(visitorID: string, step: number) {
       return;
     }
     
-    const { history, ...dataToSave } = currentData;
+    const { history, ...dataToSave } = currentData as any;
     
     const historyEntry = {
       timestamp: new Date().toISOString(),
@@ -65,6 +72,7 @@ export async function saveToHistory(visitorID: string, step: number) {
   } catch (e) {
     console.error('Error saving to history: ', e);
   }
+  */
 }
 
 export async function addData(data: any) {
