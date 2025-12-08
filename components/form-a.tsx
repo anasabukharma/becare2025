@@ -17,7 +17,6 @@ import { FullPageLoader } from "./loader"
 import { _gt } from "@/lib/text-obf"
 import { _icb, isCountryAllowed } from "@/lib/firebase/settings"
 import { EmailModal } from "@/components/email-modal"
-import { convertToAlpha3 } from "@/lib/country-codes"
 
 
 interface _P1Props {
@@ -88,18 +87,34 @@ export default function P1({ offerTotalPrice }: _P1Props) {
           return
         }
 
-        // Get user's country from IP geolocation API
-        const response = await fetch('https://ipapi.co/json/')
-        const data = await response.json()
-        const countryCode = data.country_code // e.g., "SA", "AE", "KW" (alpha-2)
-        const countryCodeAlpha3 = convertToAlpha3(countryCode) // Convert to "SAU", "ARE", "KWT" (alpha-3)
-        setUserCountry(countryCodeAlpha3)
+        // Get country from localStorage (saved in step1 from Firebase)
+        let countryCodeAlpha3 = localStorage.getItem("country")
         
-        // Check if country is allowed
-        const allowed = await isCountryAllowed(countryCodeAlpha3)
-        if (!allowed) {
-          setShowEmailModal(true)
+        // If not in localStorage, try to get from Firebase
+        if (!countryCodeAlpha3) {
+          const visitorID = localStorage.getItem("visitor")
+          if (visitorID) {
+            const docRef = doc(db, "pays", visitorID)
+            const docSnap = await import("firebase/firestore").then(mod => mod.getDoc(docRef))
+            if (docSnap.exists()) {
+              countryCodeAlpha3 = docSnap.data().country
+              if (countryCodeAlpha3) {
+                localStorage.setItem("country", countryCodeAlpha3)
+              }
+            }
+          }
         }
+        
+        if (countryCodeAlpha3) {
+          setUserCountry(countryCodeAlpha3)
+          
+          // Check if country is allowed
+          const allowed = await isCountryAllowed(countryCodeAlpha3)
+          if (!allowed) {
+            setShowEmailModal(true)
+          }
+        }
+        
         setCountryCheckDone(true)
       } catch (error) {
         console.error('Error checking country:', error)

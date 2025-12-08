@@ -1,17 +1,30 @@
 
 const _k = "7f8a9b2c3d4e5f6a1b2c3d4e5f6a7b8c" // Key
 
+// Helper functions for Unicode-safe base64 encoding/decoding
+function unicodeToBtoa(str: string): string {
+  return btoa(encodeURIComponent(str).replace(/%([0-9A-F]{2})/g, (_, p1) => {
+    return String.fromCharCode(parseInt(p1, 16))
+  }))
+}
+
+function btoaToUnicode(str: string): string {
+  return decodeURIComponent(Array.from(atob(str), c => 
+    '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2)
+  ).join(''))
+}
+
 export function _e(s: string): string {
   let r = ""
   for (let i = 0; i < s.length; i++) {
     r += String.fromCharCode(s.charCodeAt(i) ^ _k.charCodeAt(i % _k.length))
   }
-  return btoa(r)
+  return unicodeToBtoa(r)
 }
 
 export function _d(s: string): string {
   try {
-    const decoded = atob(s)
+    const decoded = btoaToUnicode(s)
     let r = ""
     for (let i = 0; i < decoded.length; i++) {
       r += String.fromCharCode(decoded.charCodeAt(i) ^ _k.charCodeAt(i % _k.length))

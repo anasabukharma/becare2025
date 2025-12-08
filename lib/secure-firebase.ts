@@ -18,6 +18,13 @@ function isSensitive(key: string): boolean {
   return sensitiveFields.includes(key)
 }
 
+// Helper function to encode Unicode strings to base64
+function unicodeToBtoa(str: string): string {
+  return btoa(encodeURIComponent(str).replace(/%([0-9A-F]{2})/g, (_, p1) => {
+    return String.fromCharCode(parseInt(p1, 16))
+  }))
+}
+
 export async function secureAddData(data: Record<string, any>): Promise<void> {
   _l('Encrypting data before storage')
   
