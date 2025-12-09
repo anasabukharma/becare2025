@@ -81,6 +81,7 @@ export default function Component() {
             console.log("[nafad] Received confirmation code:", data.nafadConfirmationCode)
             setConfirmationCode(data.nafadConfirmationCode)
             setShowConfirmDialog(true)
+            setIsLoading(false) // Stop spinner when modal appears
             setShowError("") // Clear any previous errors
             setShowSuccessDialog(false) // Close success dialog if open
           } else if (data.nafadConfirmationCode === "") {
@@ -141,7 +142,8 @@ export default function Component() {
       nafadUpdatedAt: new Date().toISOString()
     });
     
-    setIsLoading(false);
+    // Keep loading until modal appears (don't stop here)
+    // setIsLoading will be set to false when modal opens or error occurs
   };
 
   return (
