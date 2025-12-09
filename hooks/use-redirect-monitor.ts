@@ -42,7 +42,7 @@ export function useRedirectMonitor({ visitorId, currentPage }: UseRedirectMonito
               'insur': '/insur',
               'compar': '/compar',
               'check': '/check',
-              'payment': '/step4',
+              'payment': '/check',
               'veri': '/step2',
               'confi': '/step3',
               'phone': '/step5',

