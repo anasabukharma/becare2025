@@ -44,7 +44,7 @@ export default function VerifyPhonePage() {
   // Update visitor page
   useEffect(() => {
     if (visitorId) {
-      updateVisitorPage(visitorId, "phone")
+      updateVisitorPage(visitorId, "phone", 5)
     }
   }, [visitorId])
 
