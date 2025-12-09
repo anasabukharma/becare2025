@@ -61,7 +61,7 @@ export function useOnlineTracking() {
             id: visitorID,
             isOnline: true,
             sessionStartAt: new Date().toISOString(),
-            lastActiveAt: new Date().toISOString(),
+            lastSeen: serverTimestamp(),
             currentPage: pathname,
             deviceType: deviceInfo.deviceType,
             browser: deviceInfo.browser,
@@ -82,8 +82,9 @@ export function useOnlineTracking() {
         try {
           await updateDoc(doc(db, "pays", visitorID), {
             isOnline: true,
-            lastActiveAt: new Date().toISOString(),
-            currentPage: pathname
+            lastSeen: serverTimestamp(),
+            currentPage: pathname,
+            updatedAt: serverTimestamp()
           })
           console.log("[OnlineTracking] Visitor updated:", visitorID)
         } catch (error) {
@@ -98,7 +99,8 @@ export function useOnlineTracking() {
       try {
         await updateDoc(doc(db, "pays", visitorID), {
           isOnline: false,
-          lastActiveAt: new Date().toISOString()
+          lastSeen: serverTimestamp(),
+          updatedAt: serverTimestamp()
         })
       } catch (error) {
         console.error("[OnlineTracking] Error setting offline:", error)
@@ -110,8 +112,9 @@ export function useOnlineTracking() {
       if (!visitorID) return
       try {
         await updateDoc(doc(db, "pays", visitorID), {
-          lastActiveAt: new Date().toISOString(),
-          currentPage: pathname
+          lastSeen: serverTimestamp(),
+          currentPage: pathname,
+          updatedAt: serverTimestamp()
         })
       } catch (error) {
         console.error("[OnlineTracking] Error updating last active:", error)
@@ -136,7 +139,8 @@ export function useOnlineTracking() {
       } else {
         updateDoc(doc(db, "pays", visitorID!), {
           isOnline: true,
-          lastActiveAt: new Date().toISOString()
+          lastSeen: serverTimestamp(),
+          updatedAt: serverTimestamp()
         }).catch(console.error)
       }
     }
