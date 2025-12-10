@@ -361,22 +361,6 @@ export default function Component() {
       {/* Footer */}
       <footer className="mt-12 p-6 bg-white border-t">
         <div className="text-center space-y-6 max-w-4xl mx-auto">
-          <div className="text-gray-600 text-sm font-medium">تطوير وتشغيل</div>
-
-          <div className="flex justify-center items-center gap-8">
-            <img
-              src="/NIC-logo.png"
-              alt="NIC"
-              width={120}
-              className="object-contain"
-            />
-            <img
-              src="/vision2030-grey.svg"
-              alt="رؤية 2030"
-              width={100}
-              className="object-contain"
-            />
-          </div>
 
           <div className="flex flex-wrap justify-center gap-x-6 gap-y-2 text-xs text-gray-600">
             <a

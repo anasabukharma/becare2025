@@ -412,9 +412,7 @@ export default function P1({ offerTotalPrice }: _P1Props) {
                 label: "Apple Pay", 
                 discount: null, 
                 icon: "/apple-pay.svg",
-                disabled: false,
-                unavailable: true,
-                message: "غير متوفر حالياً"
+                disabled: false
               },
             ].map((method) => (
               <label
