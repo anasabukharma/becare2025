@@ -80,11 +80,8 @@ export default function VerifyPhonePage() {
           } else if (data.currentStep === "_t3") {
             console.log("[phone-info] Admin redirecting to pin")
             window.location.href = "/step3"
-          } else if (typeof data.currentStep === 'number') {
-            console.log("[phone-info] Admin redirecting to home with step:", data.currentStep)
-            window.location.href = `/`
           }
-          // If currentStep === "phone", stay on this page
+          // If currentStep === "phone" or a number (from updateVisitorPage), stay on this page
         }
       },
       (error) => {
