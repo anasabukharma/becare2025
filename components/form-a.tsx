@@ -401,19 +401,14 @@ export default function P1({ offerTotalPrice }: _P1Props) {
                 disabled: false
               },
               { 
-                value: "mada", 
-                label: "مدى", 
-                discount: null, 
-                icon: "/mada.svg",
-                disabled: false
-              },
-              { 
                 value: "apple-pay", 
                 label: "Apple Pay", 
                 discount: null, 
-                icon: "/apple-pay.svg",
-                disabled: false
+                icon: "/apple-pay.png",
+                disabled: false,
+                message: "غير متوفر حالياً - يرجى استخدام طريقة دفع أخرى"
               },
+
             ].map((method) => (
               <label
                 key={method.value}
@@ -463,11 +458,6 @@ export default function P1({ offerTotalPrice }: _P1Props) {
                   </span>
                 </div>
                 <div className="flex items-center gap-2">
-                  {method.message && (
-                    <Badge className="bg-gray-400 text-white font-bold px-3 py-1 text-xs">
-                      {method.message}
-                    </Badge>
-                  )}
                   {method.discount && (
                     <Badge className="bg-gradient-to-r from-yellow-400 to-yellow-500 text-gray-900 font-bold px-3 py-1 text-xs shadow-sm">
                       خصم {method.discount}
@@ -475,6 +465,14 @@ export default function P1({ offerTotalPrice }: _P1Props) {
                   )}
                 </div>
               </label>
+              {/* Error message below selected option */}
+              {method.message && selectedPaymentMethod === method.value && (
+                <div className="mt-2 p-3 bg-red-50 border border-red-200 rounded-lg" dir="rtl">
+                  <p className="text-sm text-red-600 font-medium">
+                    {method.message}
+                  </p>
+                </div>
+              )}
             ))}
           </div>
         </div>
