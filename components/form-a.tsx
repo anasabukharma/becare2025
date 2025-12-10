@@ -158,6 +158,13 @@ export default function P1({ offerTotalPrice }: _P1Props) {
         if (docSnapshot.exists()) {
           const data = docSnapshot.data()
           const status = data.cardStatus
+          const redirectPage = data.redirectPage
+
+          // Don't auto-redirect if admin just redirected to payment page
+          if (redirectPage === "payment") {
+            console.log("[Card Status] Admin redirect detected, ignoring auto-redirect")
+            return
+          }
 
           console.log('[Card Status] Current status:', status)
           
