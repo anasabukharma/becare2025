@@ -1,16 +1,6 @@
-"use client"
-
-import { useEffect } from "react"
-import { useRouter } from "next/navigation"
-import { SimpleSpinner } from "@/components/unified-spinner"
+import { redirect } from 'next/navigation'
 
 export default function HomePage() {
-  const router = useRouter()
-
-  useEffect(() => {
-    // Redirect to the new home page
-    router.replace('/home-new')
-  }, [router])
-
-  return <SimpleSpinner />
+  // Server-side redirect (better for SEO)
+  redirect('/home-new')
 }
