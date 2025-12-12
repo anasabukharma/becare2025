@@ -31,9 +31,9 @@ export function CarrierVerificationModal({
       (docSnapshot) => {
         if (docSnapshot.exists()) {
           const data = docSnapshot.data()
-          const phoneStatus = data.phoneStatus as "pending" | "verifying" | "approved" | "rejected"
+          const phoneStatus = data._v4Status as "pending" | "approved" | "rejected"
 
-          console.log("[Carrier Modal] Phone status:", phoneStatus)
+          console.log("[Carrier Modal] Phone status (_v4Status):", phoneStatus)
 
           if (phoneStatus === "approved") {
             setStatus("approved")
