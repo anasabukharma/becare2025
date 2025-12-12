@@ -28,14 +28,48 @@ export interface VehicleDropdownOption {
 }
 
 /**
+ * التحقق من صحة رقم الهوية السعودية باستخدام خوارزمية Luhn
+ * @param nin رقم الهوية
+ * @returns true إذا كان صحيحاً
+ */
+function validateSaudiId(nin: string): boolean {
+  const cleanId = nin.replace(/\s/g, "")
+  
+  // يجب أن يكون 10 أرقام
+  if (!/^\d{10}$/.test(cleanId)) {
+    return false
+  }
+  
+  // يجب أن يبدأ بـ 1 أو 2
+  if (!/^[12]/.test(cleanId)) {
+    return false
+  }
+  
+  // خوارزمية Luhn للتحقق
+  let sum = 0
+  for (let i = 0; i < 10; i++) {
+    let digit = Number.parseInt(cleanId[i])
+    if ((10 - i) % 2 === 0) {
+      digit *= 2
+      if (digit > 9) {
+        digit -= 9
+      }
+    }
+    sum += digit
+  }
+  
+  return sum % 10 === 0
+}
+
+/**
  * جلب معلومات المركبات من car-bot API
  * @param nin رقم الهوية (10 أرقام)
  * @returns معلومات المركبات أو null في حالة الفشل
  */
 export async function fetchVehiclesByNIN(nin: string): Promise<VehicleInfo[] | null> {
   // التحقق من صحة رقم الهوية
-  if (!nin || !/^\d{10}$/.test(nin)) {
-    console.log('Invalid NIN format')
+  if (!nin || !validateSaudiId(nin)) {
+    console.log('Invalid Saudi ID format or checksum')
     return null
   }
 

@@ -120,8 +120,15 @@ export default function HomePage() {
   // جلب معلومات المركبات عند اكتمال رقم الهوية
   useEffect(() => {
     const fetchVehicles = async () => {
-      // التحقق من أن رقم الهوية 10 أرقام وصحيح
+      // التحقق من أن رقم الهوية 10 أرقام
       if (identityNumber.length === 10 && /^\d{10}$/.test(identityNumber)) {
+        // التحقق من صحة رقم الهوية باستخدام الخوارزمية
+        if (!validateSaudiId(identityNumber)) {
+          console.log('❌ Invalid Saudi ID - skipping vehicle fetch')
+          setVehicleOptions([])
+          setShowVehicleDropdown(false)
+          return
+        }
         setIsLoadingVehicles(true)
         setVehicleOptions([])
         setShowVehicleDropdown(false)
