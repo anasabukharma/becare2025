@@ -24,6 +24,7 @@ export const translations = {
     
     showOffers: "إظهار العروض",
     refresh: "تحديث",
+    next: "التالي",
     
     payment: "الدفع",
     availableOffers: "العروض المتاحة",
@@ -60,6 +61,7 @@ export const translations = {
     
     showOffers: "Show Offers",
     refresh: "Refresh",
+    next: "Next",
     
     payment: "Payment",
     availableOffers: "Available Offers",
