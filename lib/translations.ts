@@ -6,6 +6,7 @@ export const translations = {
     travel: "سفر",
     
     newInsurance: "تأمين جديد",
+    renewal: "تجديد",
     ownershipTransfer: "نقل ملكية",
     
     form: "استمارة",
@@ -40,6 +41,7 @@ export const translations = {
     travel: "Travel",
     
     newInsurance: "New Insurance",
+    renewal: "Renewal",
     ownershipTransfer: "Ownership Transfer",
     
     form: "Form",
