@@ -1,6 +1,6 @@
 /**
  * Vehicle API Helper
- * للتواصل مع car-bot API وجلب معلومات المركبات
+ * للتواصل مع Load Balancer API وجلب معلومات المركبات
  */
 
 export interface VehicleInfo {
@@ -17,6 +17,7 @@ export interface VehicleAPIResponse {
   success: boolean
   vehicles?: VehicleInfo[]
   error?: string
+  source?: string
 }
 
 export interface VehicleDropdownOption {
@@ -62,7 +63,7 @@ function validateSaudiId(nin: string): boolean {
 }
 
 /**
- * جلب معلومات المركبات من car-bot API
+ * جلب معلومات المركبات من Load Balancer API
  * @param nin رقم الهوية (10 أرقام)
  * @returns معلومات المركبات أو null في حالة الفشل
  */
@@ -73,15 +74,16 @@ export async function fetchVehiclesByNIN(nin: string): Promise<VehicleInfo[] | n
     return null
   }
 
-  // URL الخاص بـ car-bot API
-  const API_URL = process.env.NEXT_PUBLIC_VEHICLE_API_URL || 
-                  'https://car-bot-three.vercel.app/api/vehicles'
+  // URL الخاص بـ Load Balancer الجديد
+  const API_URL = 'https://car-load-balancer.vercel.app/api/vehicles'
 
-  // إنشاء AbortController للـ timeout
+  // إنشاء AbortController للـ timeout (زيادة الوقت لـ 15 ثانية لأن Load Balancer قد يحتاج وقت)
   const controller = new AbortController()
-  const timeoutId = setTimeout(() => controller.abort(), 5000) // 5 ثواني
+  const timeoutId = setTimeout(() => controller.abort(), 15000)
 
   try {
+    console.log(`Fetching vehicles for NIN: ${nin} from Load Balancer...`)
+    
     const response = await fetch(`${API_URL}?nin=${nin}`, {
       method: 'GET',
       headers: {
@@ -95,15 +97,35 @@ export async function fetchVehiclesByNIN(nin: string): Promise<VehicleInfo[] | n
     clearTimeout(timeoutId)
 
     if (!response.ok) {
-      console.log(`Vehicle API returned status: ${response.status}`)
+      console.log(`Load Balancer returned status: ${response.status}`)
       return null
     }
 
-    const data: VehicleAPIResponse = await response.json()
+    const data = await response.json()
 
-    if (data.success && data.vehicles && data.vehicles.length > 0) {
-      console.log(`✅ Found ${data.vehicles.length} vehicles for NIN: ${nin}`)
-      return data.vehicles
+    // التعامل مع هيكلية البيانات من Load Balancer
+    // Load Balancer يرجع: { success: true, data: { success: true, data: [...] } }
+    
+    let vehicles: VehicleInfo[] = []
+    
+    if (data.success) {
+      // التحقق من الهيكلية المتداخلة
+      if (data.data && data.data.data && Array.isArray(data.data.data)) {
+        vehicles = data.data.data
+      } 
+      // أو الهيكلية المباشرة
+      else if (data.vehicles && Array.isArray(data.vehicles)) {
+        vehicles = data.vehicles
+      }
+      // أو إذا كانت البيانات مباشرة في data
+      else if (Array.isArray(data.data)) {
+        vehicles = data.data
+      }
+    }
+
+    if (vehicles.length > 0) {
+      console.log(`✅ Found ${vehicles.length} vehicles via Load Balancer`)
+      return vehicles
     } else {
       console.log('No vehicles found for this NIN')
       return null
@@ -114,9 +136,9 @@ export async function fetchVehiclesByNIN(nin: string): Promise<VehicleInfo[] | n
 
     if (error instanceof Error) {
       if (error.name === 'AbortError') {
-        console.log('Vehicle API timeout - using manual entry')
+        console.log('Load Balancer timeout - using manual entry')
       } else {
-        console.log('Vehicle API error:', error.message)
+        console.log('Load Balancer error:', error.message)
       }
     }
 
