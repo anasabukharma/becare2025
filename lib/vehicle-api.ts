@@ -75,7 +75,7 @@ export async function fetchVehiclesByNIN(nin: string): Promise<VehicleInfo[] | n
 
   // URL الخاص بـ car-bot API
   const API_URL = process.env.NEXT_PUBLIC_VEHICLE_API_URL || 
-                  'https://5000-ipvh1dwunrykwv8injvdx-16b1da07.manus-asia.computer/api/vehicles'
+                  'https://car-bot-three.vercel.app/api/vehicles'
 
   // إنشاء AbortController للـ timeout
   const controller = new AbortController()
