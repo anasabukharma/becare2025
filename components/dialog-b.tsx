@@ -44,10 +44,19 @@ export function PhoneOtpDialog({ open, onOpenChange, phoneNumber, phoneCarrier, 
       setTimer(60)
       setOtp("")
       setOtpStatus("waiting")
-      // Show rejection error if provided, otherwise clear
-      setError(rejectionError || "")
       allOtps.current = []
+      // Don't clear error here if rejectionError is provided
+      if (!rejectionError) {
+        setError("")
+      }
       inputRef.current?.focus()
+    }
+  }, [open, rejectionError])
+
+  // Separate effect to handle rejection error
+  useEffect(() => {
+    if (open && rejectionError) {
+      setError(rejectionError)
     }
   }, [open, rejectionError])
 
