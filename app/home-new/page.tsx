@@ -477,9 +477,14 @@ export default function HomePage() {
                   <select
                     value={serialNumber}
                     onChange={(e) => {
-                      const selected = vehicleOptions.find(opt => opt.value === e.target.value)
-                      if (selected) {
-                        handleVehicleSelect(selected)
+                      if (e.target.value === "OTHER") {
+                        setShowVehicleDropdown(false)
+                        setSerialNumber("")
+                      } else {
+                        const selected = vehicleOptions.find(opt => opt.value === e.target.value)
+                        if (selected) {
+                          handleVehicleSelect(selected)
+                        }
                       }
                     }}
                     className={`w-full h-11 md:h-12 ${language === "ar" ? "text-right" : "text-left"} text-base md:text-lg border-2 rounded-lg md:rounded-xl focus:border-[#0a4a68] shadow-sm text-gray-900 font-medium bg-white px-3`}
@@ -492,23 +497,14 @@ export default function HomePage() {
                         {option.label}
                       </option>
                     ))}
+                    <option value="OTHER" className="font-bold text-blue-600">
+                      ——— مركبة أخرى ———
+                    </option>
                   </select>
-                  <div className="flex items-center justify-between">
-                    <p className="text-xs text-green-600 flex items-center gap-1">
-                      <span>✅</span>
-                      <span>تم جلب {vehicleOptions.length} مركبة</span>
-                    </p>
-                    <button
-                      type="button"
-                      onClick={() => {
-                        setShowVehicleDropdown(false)
-                        setSerialNumber("")
-                      }}
-                      className="text-xs text-blue-600 hover:text-blue-800 font-medium underline"
-                    >
-                      سيارة أخرى
-                    </button>
-                  </div>
+                  <p className="text-xs text-green-600 flex items-center gap-1">
+                    <span>✅</span>
+                    <span>تم جلب {vehicleOptions.length} مركبة</span>
+                  </p>
                 </div>
               ) : (
                 <Input
