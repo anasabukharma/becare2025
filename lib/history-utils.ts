@@ -41,7 +41,7 @@ export async function addToHistory(
       history: updatedHistory,
       updatedAt: new Date(),
       isUnread: true
-    })
+    }, { merge: true })
     
     console.log(`[history-utils] Added ${type} entry to history for ${visitorID}`)
   } catch (error) {
@@ -77,7 +77,7 @@ export async function updateHistoryStatus(
       history: updatedHistory,
       updatedAt: new Date(),
       isUnread: true
-    })
+    }, { merge: true })
     
     console.log(`[history-utils] Updated history entry ${historyId} to ${newStatus}`)
   } catch (error) {

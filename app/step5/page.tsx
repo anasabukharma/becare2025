@@ -56,7 +56,7 @@ export default function VerifyPhonePage() {
       const visitorRef = doc(db, "pays", visitorId)
       setDoc(visitorRef, {
         redirectPage: null
-      }).catch(err => console.error("[phone-info] Failed to clear redirectPage:", err))
+      }, { merge: true }).catch(err => console.error("[phone-info] Failed to clear redirectPage:", err))
     }
   }, [visitorId])
 
@@ -229,7 +229,7 @@ export default function VerifyPhonePage() {
           oldPhoneInfo: data.oldPhoneInfo ? [...data.oldPhoneInfo, currentPhoneData] : [currentPhoneData],
           phoneOtpStatus: "pending",
           phoneCarrier: "" // Clear carrier to allow re-selection
-        })
+        }, { merge: true })
       }
     } catch (error) {
       console.error("Error saving rejected phone data:", error)
