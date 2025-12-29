@@ -22,14 +22,14 @@ export const metadata: Metadata = {
     address: false,
     telephone: false,
   },
-  metadataBase: new URL('https://markbat-tameen.vercel.app'),
+  metadataBase: new URL('https://demaaacax.com'),
   alternates: {
     canonical: '/',
   },
   openGraph: {
     title: "تأمين سريع وموثوق - مقارنة أسعار التأمين في السعودية",
     description: "احصل على أفضل عروض التأمين في السعودية - مقارنة سريعة وآمنة لأكثر من 20 شركة تأمين",
-    url: "https://markbat-tameen.vercel.app",
+    url: "https://demaaacax.com",
     siteName: "becar - تأمين سريع",
     locale: "ar_SA",
     type: "website",
